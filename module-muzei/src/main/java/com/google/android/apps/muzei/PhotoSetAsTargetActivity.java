@@ -25,7 +25,6 @@ import android.os.Bundle;
 
 import com.google.android.apps.muzei.gallery.GalleryArtSource;
 import com.google.android.apps.muzei.gallery.GalleryContract;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class PhotoSetAsTargetActivity extends Activity {
     @Override
@@ -40,10 +39,6 @@ public class PhotoSetAsTargetActivity extends Activity {
 
         // Select the gallery source
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID,
-                new ComponentName(this, GalleryArtSource.class).flattenToShortString());
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "sources");
-        FirebaseAnalytics.getInstance(this).logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
         SourceManager.selectSource(this, new ComponentName(this, GalleryArtSource.class));
 
         // Add and publish the chosen photo

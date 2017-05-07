@@ -2,6 +2,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="news.androidtv.neodash">
 
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Don't request this starting with Marshmallow (we only write to the app's cache folder) -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="22" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,6 +24,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Neodash.AppTheme"
         tools:replace="android:theme">
+
+        <activity android:name="news.androidtv.neodash.activities.StartupActivity"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".activities.DemoActivity"
+            android:exported="true"
+            />
 
     </application>
 

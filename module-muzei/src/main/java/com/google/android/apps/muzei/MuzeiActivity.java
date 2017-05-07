@@ -75,7 +75,6 @@ import com.google.android.apps.muzei.util.DrawInsetsFrameLayout;
 import com.google.android.apps.muzei.util.PanScaleProxyView;
 import com.google.android.apps.muzei.util.ScrimUtil;
 import com.google.android.apps.muzei.util.TypefaceUtil;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import net.nurik.roman.muzei.BuildConfig;
 import net.nurik.roman.muzei.R;
@@ -259,7 +258,6 @@ public class MuzeiActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.muzei_activity);
-        FirebaseAnalytics.getInstance(this).setUserProperty("device_type", BuildConfig.DEVICE_TYPE);
 
         mContainerView = (DrawInsetsFrameLayout) findViewById(R.id.container);
 
@@ -316,13 +314,12 @@ public class MuzeiActivity extends AppCompatActivity {
         getSupportLoaderManager().initLoader(1, null, mArtworkLoaderCallbacks);
     }
 
-    private void setupIntroModeUi() {
+    protected void setupIntroModeUi() {
         mIntroContainerView = (ViewGroup) findViewById(R.id.intro_container);
 
         findViewById(R.id.activate_muzei_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAnalytics.getInstance(MuzeiActivity.this).logEvent("activate", null);
                 try {
                     startActivity(new Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
                             .putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
@@ -419,7 +416,6 @@ public class MuzeiActivity extends AppCompatActivity {
 
         // Special work
         if (newUiMode == UI_MODE_INTRO) {
-            FirebaseAnalytics.getInstance(this).logEvent(FirebaseAnalytics.Event.TUTORIAL_BEGIN, null);
             final View activateButton = findViewById(R.id.activate_muzei_button);
             activateButton.setAlpha(0);
             final AnimatedMuzeiLogoFragment logoFragment = (AnimatedMuzeiLogoFragment)
@@ -513,10 +509,6 @@ public class MuzeiActivity extends AppCompatActivity {
                 });
             }
             set.start();
-        }
-
-        if (newUiMode == UI_MODE_ART_DETAIL) {
-            FirebaseAnalytics.getInstance(this).logEvent(FirebaseAnalytics.Event.TUTORIAL_COMPLETE, null);
         }
 
         mPanScaleProxyView.setVisibility(newUiMode == UI_MODE_ART_DETAIL
@@ -692,11 +684,9 @@ public class MuzeiActivity extends AppCompatActivity {
                     return true;
                 }
 
-                switch (menuItem.getItemId()) {
-                    case R.id.action_settings:
-                        FirebaseAnalytics.getInstance(MuzeiActivity.this).logEvent("settings_open", null);
-                        startActivity(new Intent(MuzeiActivity.this, SettingsActivity.class));
-                        return true;
+                if (menuItem.getItemId() == R.id.action_settings) {
+                    startActivity(new Intent(MuzeiActivity.this, SettingsActivity.class));
+                    return true;
                 }
                 return false;
             }

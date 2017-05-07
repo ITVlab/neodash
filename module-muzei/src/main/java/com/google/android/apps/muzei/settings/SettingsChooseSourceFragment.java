@@ -60,7 +60,6 @@ import com.google.android.apps.muzei.api.MuzeiContract;
 import com.google.android.apps.muzei.util.CheatSheet;
 import com.google.android.apps.muzei.util.ObservableHorizontalScrollView;
 import com.google.android.apps.muzei.util.Scrollbar;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import net.nurik.roman.muzei.R;
 
@@ -134,8 +133,6 @@ public class SettingsChooseSourceFragment extends Fragment implements LoaderMana
         }
 
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "sources");
-        FirebaseAnalytics.getInstance(getActivity()).logEvent(FirebaseAnalytics.Event.VIEW_ITEM_LIST, bundle);
     }
 
     @Override
@@ -467,17 +464,10 @@ public class SettingsChooseSourceFragment extends Fragment implements LoaderMana
                         ((Callbacks) getActivity()).onRequestCloseActivity();
                     } else if (source.setupActivity != null) {
                         Bundle bundle = new Bundle();
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, source.componentName.flattenToShortString());
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, source.label);
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, "sources");
-                        FirebaseAnalytics.getInstance(getActivity()).logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
                         mCurrentInitialSetupSource = source.componentName;
                         launchSourceSetup(source);
                     } else {
                         Bundle bundle = new Bundle();
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, source.componentName.flattenToShortString());
-                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "sources");
-                        FirebaseAnalytics.getInstance(getActivity()).logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                         SourceManager.selectSource(getContext(), source.componentName);
                     }
                 }
@@ -558,9 +548,6 @@ public class SettingsChooseSourceFragment extends Fragment implements LoaderMana
         if (requestCode == REQUEST_EXTENSION_SETUP) {
             if (resultCode == Activity.RESULT_OK && mCurrentInitialSetupSource != null) {
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mCurrentInitialSetupSource.flattenToShortString());
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "sources");
-                FirebaseAnalytics.getInstance(getActivity()).logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                 SourceManager.selectSource(getContext(), mCurrentInitialSetupSource);
             }
 

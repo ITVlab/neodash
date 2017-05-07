@@ -48,7 +48,6 @@ import com.google.android.apps.muzei.settings.Prefs;
 import com.google.android.apps.muzei.shortcuts.ArtworkInfoShortcutController;
 import com.google.android.apps.muzei.sync.TaskQueueService;
 import com.google.android.apps.muzei.wearable.WearableController;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import net.nurik.roman.muzei.BuildConfig;
 import net.rbgrn.android.glwallpaperservice.GLWallpaperService;
@@ -91,7 +90,6 @@ public class MuzeiWallpaperService extends GLWallpaperService {
     }
 
     private void initialize() {
-        FirebaseAnalytics.getInstance(this).setUserProperty("device_type", BuildConfig.DEVICE_TYPE);
         SourceManager.subscribeToSelectedSource(MuzeiWallpaperService.this);
         mNetworkChangeReceiver = new NetworkChangeReceiver();
         IntentFilter networkChangeFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -273,7 +271,6 @@ public class MuzeiWallpaperService extends GLWallpaperService {
 
         private void activateWallpaper() {
             mWallpaperActivated = true;
-            FirebaseAnalytics.getInstance(MuzeiWallpaperService.this).logEvent("wallpaper_created", null);
             EventBus.getDefault().postSticky(new WallpaperActiveStateChangedEvent(true));
         }
 
@@ -290,7 +287,6 @@ public class MuzeiWallpaperService extends GLWallpaperService {
         public void onDestroy() {
             EventBus.getDefault().unregister(this);
             if (mWallpaperActivated) {
-                FirebaseAnalytics.getInstance(MuzeiWallpaperService.this).logEvent("wallpaper_destroyed", null);
                 EventBus.getDefault().postSticky(new WallpaperActiveStateChangedEvent(false));
             } else if (!isPreview()) {
                 unregisterReceiver(mEngineUnlockReceiver);

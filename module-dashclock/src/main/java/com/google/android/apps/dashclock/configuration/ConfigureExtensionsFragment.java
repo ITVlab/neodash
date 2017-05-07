@@ -577,20 +577,18 @@ public class ConfigureExtensionsFragment extends Fragment implements
                     return false;
                 }
 
-                switch (item.getItemId()) {
-                    case R.id.action_remove:
-                        mSwipeDismissTouchListener.dismiss(mPosition);
-                        return true;
+                if (item.getItemId() == R.id.action_remove) {
+                    mSwipeDismissTouchListener.dismiss(mPosition);
+                    return true;
+                } else if (item.getItemId() == R.id.action_settings) {
+                    ComponentName cn = (ComponentName) getItem(mPosition);
+                    ExtensionListing listing = mExtensionListings.get(cn);
+                    if (listing == null) {
+                        return false;
+                    }
 
-                    case R.id.action_settings:
-                        ComponentName cn = (ComponentName) getItem(mPosition);
-                        ExtensionListing listing = mExtensionListings.get(cn);
-                        if (listing == null) {
-                            return false;
-                        }
-
-                        showExtensionSettings(getActivity(), listing);
-                        return true;
+                    showExtensionSettings(getActivity(), listing);
+                    return true;
                 }
                 return false;
             }

@@ -35,7 +35,6 @@ import com.google.android.apps.muzei.SourceManager;
 import com.google.android.apps.muzei.api.MuzeiArtSource;
 import com.google.android.apps.muzei.api.MuzeiContract;
 import com.google.android.apps.muzei.event.WallpaperActiveStateChangedEvent;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import net.nurik.roman.muzei.R;
 
@@ -54,7 +53,6 @@ public class NextArtworkTileService extends TileService {
 
     @Override
     public void onTileAdded() {
-        FirebaseAnalytics.getInstance(this).logEvent("tile_next_artwork_added", null);
     }
 
     @Override
@@ -133,8 +131,6 @@ public class NextArtworkTileService extends TileService {
             return;
         }
         if (tile.getState() == Tile.STATE_ACTIVE) {
-            FirebaseAnalytics.getInstance(NextArtworkTileService.this).logEvent(
-                    "tile_next_artwork_click", null);
             // Active means we send the 'Next Artwork' command
             SourceManager.sendAction(this, MuzeiArtSource.BUILTIN_COMMAND_ID_NEXT_ARTWORK);
         } else {
@@ -142,8 +138,6 @@ public class NextArtworkTileService extends TileService {
             unlockAndRun(new Runnable() {
                 @Override
                 public void run() {
-                    FirebaseAnalytics.getInstance(NextArtworkTileService.this).logEvent(
-                            "tile_next_artwork_activate", null);
                     try {
                         startActivityAndCollapse(new Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
                                 .putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
@@ -172,6 +166,5 @@ public class NextArtworkTileService extends TileService {
 
     @Override
     public void onTileRemoved() {
-        FirebaseAnalytics.getInstance(this).logEvent("tile_next_artwork_removed", null);
     }
 }

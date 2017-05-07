@@ -33,7 +33,6 @@ import com.google.android.apps.muzei.api.MuzeiContract;
 import com.google.android.apps.muzei.api.UserCommand;
 import com.google.android.apps.muzei.featuredart.FeaturedArtSource;
 import com.google.android.apps.muzei.sync.TaskQueueService;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import net.nurik.roman.muzei.BuildConfig;
 
@@ -181,15 +180,11 @@ public class SourceManager {
         if (packageName.length() > MAX_VALUE_LENGTH) {
             packageName = packageName.substring(packageName.length() - MAX_VALUE_LENGTH);
         }
-        FirebaseAnalytics.getInstance(context).setUserProperty(USER_PROPERTY_SELECTED_SOURCE_PACKAGE,
-                packageName);
         String className = selectedSource.flattenToShortString();
         className = className.substring(className.indexOf('/')+1);
         if (className.length() > MAX_VALUE_LENGTH) {
             className = className.substring(className.length() - MAX_VALUE_LENGTH);
         }
-        FirebaseAnalytics.getInstance(context).setUserProperty(USER_PROPERTY_SELECTED_SOURCE,
-                className);
     }
 
     public static ComponentName getSelectedSource(Context context) {
