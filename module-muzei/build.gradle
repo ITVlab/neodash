@@ -5,8 +5,8 @@ android {
     buildToolsVersion "25.0.2"
 
     defaultConfig {
-        minSdkVersion 17
-        targetSdkVersion 25
+        minSdkVersion 19
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
 
@@ -26,6 +26,26 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-//    compile 'com.android.support:appcompat-v7:25.3.1'
     testCompile 'junit:junit:4.12'
+    compile "com.squareup.okhttp3:okhttp:$rootProject.ext.okhttpVersion"
+    compile "com.squareup.picasso:picasso:$rootProject.ext.picassoVersion"
+    compile "com.google.android.gms:play-services-wearable:$rootProject.ext.googlePlayServicesVersion"
+//    compile "com.google.firebase:firebase-core:$rootProject.ext.googlePlayServicesVersion"
+    // Only use crash reporting in the "prod" product flavor
+//    compile "com.google.firebase:firebase-crash:$rootProject.ext.googlePlayServicesVersion"
+    compile "com.twofortyfouram:android-plugin-api-for-locale:1.0.2"
+    compile "org.greenrobot:eventbus:3.0.0"
+    compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:recyclerview-v7:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:design:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:customtabs:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:exifinterface:$rootProject.ext.supportLibraryVersion"
+
+    // :api is included as a transitive dependency from :android-client-common
+    // compile project(':api')
+    compile project(':muzei-android-client-common')
+    compile project(':muzei-source-featured-art')
+    compile project(':muzei-source-gallery')
 }
+
+//apply plugin: 'com.google.gms.google-services'

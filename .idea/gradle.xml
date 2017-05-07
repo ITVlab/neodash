@@ -12,6 +12,10 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/module-dashclock" />
             <option value="$PROJECT_DIR$/module-muzei" />
+            <option value="$PROJECT_DIR$/muzei-android-client-common" />
+            <option value="$PROJECT_DIR$/muzei-api" />
+            <option value="$PROJECT_DIR$/muzei-source-featured-art" />
+            <option value="$PROJECT_DIR$/muzei-source-gallery" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

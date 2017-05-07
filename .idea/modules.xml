@@ -5,6 +5,10 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/module-dashclock/module-dashclock.iml" filepath="$PROJECT_DIR$/module-dashclock/module-dashclock.iml" />
       <module fileurl="file://$PROJECT_DIR$/module-muzei/module-muzei.iml" filepath="$PROJECT_DIR$/module-muzei/module-muzei.iml" />
+      <module fileurl="file://$PROJECT_DIR$/muzei-android-client-common/muzei-android-client-common.iml" filepath="$PROJECT_DIR$/muzei-android-client-common/muzei-android-client-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/muzei-api/muzei-api.iml" filepath="$PROJECT_DIR$/muzei-api/muzei-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/muzei-source-featured-art/muzei-source-featured-art.iml" filepath="$PROJECT_DIR$/muzei-source-featured-art/muzei-source-featured-art.iml" />
+      <module fileurl="file://$PROJECT_DIR$/muzei-source-gallery/muzei-source-gallery.iml" filepath="$PROJECT_DIR$/muzei-source-gallery/muzei-source-gallery.iml" />
       <module fileurl="file://$PROJECT_DIR$/neodash.iml" filepath="$PROJECT_DIR$/neodash.iml" />
     </modules>
   </component>

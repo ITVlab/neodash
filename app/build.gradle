@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "news.androidtv.neodash"
-        minSdkVersion 17
+        minSdkVersion rootProject.ext.targetSdkVersion
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -20,6 +20,8 @@ android {
 }
 
 dependencies {
+    compile project(':module-dashclock')
+    compile project(':module-muzei')
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

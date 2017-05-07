@@ -1,0 +1,149 @@
+<!--
+  Copyright 2014 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
+<resources>
+
+    <!-- Muzei activity -->
+
+    <style name="Theme.MuzeiActivity" parent="Theme.Muzei.Wallpaper">
+        <!-- on Samsung devices, window animations between windows showing
+             the wallpaper seem to be broken, so don't use them. -->
+        <!--<item name="android:windowAnimationStyle">@style/WindowAnimation.MuzeiActivity</item>-->
+    </style>
+
+    <!-- Settings activity -->
+
+    <style name="Theme.Muzei.Settings" parent="Theme.Muzei.Wallpaper">
+        <item name="colorControlActivated">#fff</item>
+    </style>
+
+    <style name="Settings.Widget.SeekBar.BlurAmount" parent="Widget.Muzei.SeekBar">
+        <item name="android:progressDrawable">@drawable/scrubber_progress_blur_amount</item>
+    </style>
+
+    <style name="Settings.Widget.SeekBar.DimAmount" parent="Widget.Muzei.SeekBar">
+        <item name="android:progressDrawable">@drawable/scrubber_progress_dim_amount</item>
+    </style>
+
+    <style name="Settings.Widget.SeekBar.GreyAmount" parent="Widget.Muzei.SeekBar">
+        <item name="android:progressDrawable">@drawable/scrubber_progress_grey_amount</item>
+    </style>
+
+    <!-- About -->
+
+    <style name="Theme.Muzei.About" parent="Theme.Muzei.Wallpaper">
+    </style>
+
+    <!-- Global -->
+
+    <style name="Theme.Muzei.Base" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <!--<item name="android:actionModeBackground">@drawable/cab_background</item>-->
+        <!--<item name="android:actionModeStyle">@style/Widget.Muzei.ActionMode</item>-->
+        <!--<item name="android:actionOverflowButtonStyle">@style/Widget.Muzei.ActionButton.Overflow</item>-->
+        <item name="android:selectableItemBackground">@drawable/white_selectable_item_background</item>
+        <item name="android:seekBarStyle">@style/Widget.Muzei.SeekBar</item>
+        <item name="android:spinnerStyle">@style/Widget.Muzei.Spinner</item>
+        <item name="android:dropDownListViewStyle">@style/Widget.Muzei.ListView.DropDown</item>
+        <item name="android:popupMenuStyle">@style/Widget.Muzei.PopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/Widget.Muzei.PopupMenu.Overflow</item>
+        <item name="android:textAppearanceMedium">@style/TextAppearance.Muzei.Medium</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/TextAppearance.Muzei.LargePopupMenu</item>
+
+        <item name="colorPrimary">@color/theme_primary</item>
+        <item name="colorAccent">@color/theme_accent</item>
+    </style>
+
+    <style name="Theme.Muzei.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/theme_primary</item>
+    </style>
+
+    <style name="ThemeOverlay.Muzei.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:dropDownListViewStyle">@style/Widget.Muzei.ListView.DropDown</item>
+        <item name="android:popupMenuStyle">@style/Widget.Muzei.PopupMenu</item>
+    </style>
+
+    <style name="Theme.Muzei" parent="Theme.Muzei.Base"> <!-- pre-Lollipop -->
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
+    <style name="TextAppearance.ActionBar.Title" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="Theme.Muzei.Wallpaper" parent="Theme.Muzei">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowShowWallpaper">true</item>
+    </style>
+
+    <style name="Widget.Muzei.PopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/popup_background</item>
+    </style>
+
+    <style name="Widget.Muzei.PopupMenu.Overflow" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">@drawable/popup_background</item>
+    </style>
+
+    <style name="Muzei.SimpleFadeFragmentAnimation" parent="">
+        <item name="android:fragmentFadeEnterAnimation">@animator/fade_in</item>
+        <item name="android:fragmentFadeExitAnimation">@animator/fade_out</item>
+    </style>
+
+    <style name="Widget.Muzei.SeekBar" parent="android:Widget.Holo.SeekBar">
+        <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal</item>
+        <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal</item>
+        <item name="android:thumb">@drawable/scrubber_control_selector</item>
+    </style>
+
+    <style name="Widget.Muzei.Spinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:popupBackground">@drawable/popup_background</item>
+    </style>
+
+    <!-- https://code.google.com/p/android/issues/detail?id=24922 -->
+    <style name="Widget.Muzei.ListView.DropDown" parent="Widget.AppCompat.ListView.DropDown">
+        <item name="android:popupBackground">@drawable/popup_background</item>
+        <item name="android:listSelector">?selectableItemBackground</item>
+        <item name="android:dropDownVerticalOffset">-4dp</item>
+    </style>
+
+    <style name="TextAppearance.Muzei.Medium" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="TextAppearance.Muzei.LargePopupMenu" parent="TextAppearance.AppCompat.Widget.PopupMenu.Large">
+        <item name="android:textColor">#eee</item>
+    </style>
+
+    <style name="Widget.Muzei.TextView.SettingsAdvancedSeekBarLabel" parent="">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">@dimen/settings_text_size_large</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.Muzei.CheckBox.SettingsAdvanced" parent="">
+        <item name="android:textSize">@dimen/settings_text_size_normal</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingEnd">0dp</item>
+    </style>
+
+</resources>

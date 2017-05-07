@@ -1,0 +1,28 @@
+apply plugin: 'com.android.library'
+
+dependencies {
+    compile project(':muzei-api')
+    compile "com.android.support:support-compat:$rootProject.ext.supportLibraryVersion"
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion rootProject.ext.targetSdkVersion
+
+        def documentsAuthorityValue = "com.google.android.apps.muzei.documents"
+        manifestPlaceholders =
+                [documentsAuthority: documentsAuthorityValue]
+        buildConfigField("String",
+                "DOCUMENTS_AUTHORITY",
+                "\"${documentsAuthorityValue}\"")
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
