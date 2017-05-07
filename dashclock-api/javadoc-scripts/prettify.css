@@ -1,0 +1,16 @@
+.pln { color: #000000; }  /* plain text */
+.str,
+.atv { color: #00BFA5; }  /* string content and attribute value */
+.kwd,
+.tag { color: #039BE5;  }  /* a keyword or tag */
+.com { color: #999999; }  /* a comment */
+.typ,
+.var { color: #6200EA; }  /* a type name or xq variable */
+.lit { color: #D81B60; }  /* a literal value */
+.pun,
+.opn,
+.clo { color: #A3A3A3; } /* punctuation, lisp open bracket, lisp close bracket */
+.atn { color: #D81B60; }  /* a markup attribute name */
+.dec,
+.var { color: #6200EA; }  /* a declaration like doctype */
+.fun { color: #FFFFFF; }  /* a function name */

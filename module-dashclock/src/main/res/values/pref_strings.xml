@@ -1,0 +1,149 @@
+<!--
+  Copyright 2012 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
+<resources>
+    <!-- Advanced widget preferences -->
+    <string name="pref_clock_shortcut_title">Clock shortcut</string>
+    <string name="pref_background_title">Background</string>
+    <string name="pref_foreground_color_title">Foreground color</string>
+    <string name="pref_homescreen_title">Home screen widget</string>
+    <string name="pref_lockscreen_title">Lock screen widget</string>
+    <string name="pref_background_opacity_title">Background visibility</string>
+    <string-array name="pref_background_opacity_display_names">
+        <item>Fully transparent</item>
+        <item>25% visible</item>
+        <item>50% visible</item>
+        <item>75% visible</item>
+        <item>Fully opaque</item>
+    </string-array>
+    <string-array name="pref_background_opacity_values" translatable="false">
+        <item>0</item>
+        <item>25</item>
+        <item>50</item>
+        <item>75</item>
+        <item>100</item>
+    </string-array>
+    <string name="pref_foreground_color_description">The color of text and icons</string>
+    <string name="pref_aggressive_centering_title">Always center</string>
+    <string name="pref_aggressive_centering_description">Can result in the clock jumping around for different widget states</string>
+    <string name="pref_settings_button_title">Settings button</string>
+    <string-array name="pref_settings_button_display_names">
+        <item>Hidden</item>
+        <item>In expanded widget</item>
+        <item>In app launcher</item>
+    </string-array>
+    <string-array name="pref_settings_button_values" translatable="false">
+        <item>hidden</item>
+        <item>inwidget</item>
+        <item>inlauncher</item>
+    </string-array>
+    <string name="pref_hide_clock_title">Hide clock</string>
+    <string name="pref_hide_clock_description">Hide the clock and only show extensions</string>
+
+    <!-- Universal settings preferences -->
+    <string name="pref_shortcut_title">Shortcut</string>
+    <string name="pref_shortcut_default">(Default)</string>
+
+    <!-- Weather -->
+    <string name="pref_weather_units_title">Weather units</string>
+    <string-array name="pref_weather_units_display_names">
+        <item>°F</item>
+        <item>°C</item>
+    </string-array>
+    <string-array name="pref_weather_units_values" translatable="false">
+        <item>f</item>
+        <item>c</item>
+    </string-array>
+    <string name="pref_weather_location_title">Location</string>
+    <string name="pref_weather_location_query_hint">Find a location</string>
+    <string name="pref_weather_location_automatic">Automatic</string>
+    <string name="pref_weather_location_automatic_description">Based on your current location.</string>
+
+    <!-- Gmail -->
+    <string name="pref_gmail_label_title">Show unread count for label</string>
+    <string-array name="pref_gmail_label_display_names">
+        <item>Inbox</item>
+        <item>Priority Inbox</item>
+    </string-array>
+    <string-array name="pref_gmail_label_inbox_values" translatable="false">
+        <item>i</item>
+        <item>p</item>
+    </string-array>
+
+    <string name="pref_gmail_accounts_title">Show unread count for accounts</string>
+    <plurals name="pref_gmail_accounts_summary_template">
+        <item quantity="one">%1$d of %2$d account selected</item>
+        <item quantity="other">%1$d of %2$d accounts selected</item>
+    </plurals>
+
+    <!-- Calendar -->
+    <string name="pref_calendar_look_ahead_hours_title">Show appointments in the next</string>
+    <string-array name="pref_calendar_look_ahead_hours_display_names">
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>12 hours</item>
+        <item>24 hours</item>
+        <item>2 days</item>
+        <item>week</item>
+    </string-array>
+    <string-array name="pref_calendar_look_ahead_hours_values" translatable="false">
+        <item>3</item>
+        <item>6</item>
+        <item>12</item>
+        <item>24</item>
+        <item>48</item>
+        <item>168</item>
+    </string-array>
+    <string name="pref_calendar_selected_title">Select calendars to display</string>
+    <plurals name="pref_calendar_selected_summary_template">
+        <item quantity="one">%1$d of %2$d calendar selected</item>
+        <item quantity="other">%1$d of %2$d calendars selected</item>
+    </plurals>
+    <string name="pref_calendar_custom_visibility_title">Custom calendar visibility</string>
+    <string name="pref_calendar_custom_visibility_description">If unchecked, show all visible calendars in the Calendar app</string>
+    <string name="pref_calendar_show_all_day_title">Show all-day events</string>
+    <string name="pref_calendar_show_all_day_description">Include all-day events such as birthdays</string>
+
+    <!-- Daydream preferences -->
+    <string name="pref_daydream_color_title">Foreground color</string>
+    <string name="pref_daydream_color_description">The color of text and icons in Daydream mode</string>
+    <string name="pref_daydream_night_mode_title">Night mode</string>
+    <string name="pref_daydream_night_mode_description">Very dim display (for dark rooms)</string>
+    <string name="pref_daydream_animation_title">Animation</string>
+    <string-array name="pref_daydream_animation_display_names">
+        <item>Pendulum (default)</item>
+        <item>Slide</item>
+        <item>Fade</item>
+        <item>None (may damage your screen)</item>
+    </string-array>
+    <string-array name="pref_daydream_animation_values" translatable="false">
+        <item>pendulum</item>
+        <item>slide</item>
+        <item>fade</item>
+        <item>none</item>
+    </string-array>
+    <string name="pref_daydream_system_settings_title">System Daydream settings</string>
+
+    <!-- World readability -->
+    <string name="pref_force_world_readable_title">Allow other apps to see all extensions</string>
+    <string name="pref_force_world_readable_description">Allow other apps to see information from all extensions, including your calendar, contacts, etc.</string>
+
+    <string name="force_world_readable_dialog_description">Another app is requesting the ability to see information from all your DashClock extensions, including private ones such as calendar, contacts, etc. Do you want to <b>allow this for all apps</b>?</string>
+
+    <string name="force_world_readable_dialog_no">Cancel</string>
+    <string name="force_world_readable_dialog_yes">Allow for all apps</string>
+
+</resources>

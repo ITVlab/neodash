@@ -26,6 +26,12 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
     testCompile 'junit:junit:4.12'
+
+    compile "com.android.support:support-v13:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
+    compile "com.google.android.gms:play-services-base:$rootProject.ext.googlePlayServicesVersion"
+    compile "com.google.android.gms:play-services-location:$rootProject.ext.googlePlayServicesVersion"
+    compile 'com.mobeta.android.dslv:drag-sort-listview:0.6.1'
+    compile project(':dashclock-api')
 }

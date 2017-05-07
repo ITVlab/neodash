@@ -18,6 +18,14 @@ allprojects {
     }
 }
 
+subprojects {
+    repositories {
+        maven { url 'https://raw.githubusercontent.com/Goddchen/mvn-repo/master/' }
+        mavenCentral()
+        jcenter()
+    }
+}
+
 ext {
     compileSdkVersion = 25
     buildToolsVersion = "25.0.2"

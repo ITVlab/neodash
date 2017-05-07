@@ -1,0 +1,119 @@
+﻿<!--
+  Copyright 2012 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
+<resources>
+    <!-- Advanced widget preferences -->
+    <string name="pref_clock_shortcut_title">Skratka pre hodiny</string>
+    <string name="pref_background_title">Pozadie</string>
+    <string name="pref_foreground_color_title">Farba popredia</string>
+    <string name="pref_homescreen_title">Miniaplikácia na domovskej obrazovke</string>
+    <string name="pref_lockscreen_title">Miniaplikácia na uzamykacej obrazovke</string>
+    <string name="pref_background_opacity_title">Viditeľnosť pozadia</string>
+    <string-array name="pref_background_opacity_display_names">
+        <item>Úplne priehľadné</item>
+        <item>Viditeľné na 25%</item>
+        <item>Viditeľné na 50%</item>
+        <item>Viditeľné na 75%</item>
+        <item>Úplne nepriehľadné</item>
+    </string-array>
+    <string name="pref_foreground_color_description">Farba textu a ikon</string>
+    <string name="pref_aggressive_centering_title">Vždy centrovať</string>
+    <string name="pref_aggressive_centering_description">Môže mať za následok skákanie hodín okolo rôznych miniaplikácií</string>
+    <string name="pref_settings_button_title">Tlačidlo nastavenia</string>
+    <string-array name="pref_settings_button_display_names">
+        <item>Skryté</item>
+        <item>V rozšírenej miniaplikácii</item>
+        <item>V spúšťači aplikácií</item>
+    </string-array>
+    <string name="pref_show_app_launcher_icon_title">Zobraziť ikonu aplikácie</string>
+    <string name="pref_show_app_launcher_icon_description">Zobraziť Nastavenia DashClock v spúšťači</string>
+	<string name="pref_hide_clock_title">Skryť hodiny</string>
+	<string name="pref_hide_clock_description">Skryť hodiny a zobraziť len rozšírenia</string>
+	
+    <!-- Universal settings preferences -->
+    <string name="pref_shortcut_title">Skratka</string>
+    <string name="pref_shortcut_default">(Predvolené)</string>
+
+    <!-- Weather -->
+    <string name="pref_weather_units_title">Jednotka teploty</string>
+    <string-array name="pref_weather_units_display_names">
+        <item>°F</item>
+        <item>°C</item>
+    </string-array>
+    <string name="pref_weather_location_title">Poloha</string>
+    <string name="pref_weather_location_query_hint">Nájsť polohu</string>
+    <string name="pref_weather_location_automatic">Automaticky</string>
+    <string name="pref_weather_location_automatic_description">Na základe vašej aktuálnej polohy.</string>
+
+    <!-- Gmail -->
+    <string name="pref_gmail_label_title">Zobraziť počet neprečítaných e-mailov na štítku</string>
+    <string-array name="pref_gmail_label_display_names">
+        <item>Doručená pošta</item>
+        <item>Prioritná pošta</item>
+    </string-array>
+
+    <string name="pref_gmail_accounts_title">Zobraziť počet neprečítaných e-mailov pre účty</string>
+    <plurals name="pref_gmail_accounts_summary_template">
+        <item quantity="one">Vybratý %1$d účet z %2$d</item>
+        <item quantity="few">Vybraté %1$d účty z %2$d</item>
+        <item quantity="other">Vybratých %1$d účtov z %2$d</item>
+    </plurals>
+
+    <!-- Calendar -->
+    <string name="pref_calendar_look_ahead_hours_title">Zobraziť schôdzky v nasledujúcich/com</string>
+    <string-array name="pref_calendar_look_ahead_hours_display_names">
+        <item>3 hodinách</item>
+        <item>6 hodinách</item>
+        <item>12 hodinách</item>
+        <item>24 hodinách</item>
+        <item>2 dňoch</item>
+        <item>týždni</item>
+    </string-array>
+    <string name="pref_calendar_selected_title">Zobraziť kalendár</string>
+    <plurals name="pref_calendar_selected_summary_template">
+        <item quantity="one">Vybratý %1$d kalendár z %2$d</item>
+        <item quantity="few">Vybraté %1$d kalendáre z %2$d</item>
+        <item quantity="other">Vybratých %1$d kalendárov z %2$d</item>
+    </plurals>
+    <string name="pref_calendar_custom_visibility_title">Vlastná viditeľnosť kalendára</string>
+    <string name="pref_calendar_custom_visibility_description">Ak nie je povolené, zobrazí všetky viditeľné kalendáre v aplikácii Kalendár</string>
+    <string name="pref_calendar_show_all_day_title">Zobraziť celodenné udalosti</string>
+    <string name="pref_calendar_show_all_day_description">Zahrnúť všetky celodenné udalosti (napr. narodeniny)</string>
+
+    <!-- Daydream preferences -->
+    <string name="pref_daydream_color_title">Farba popredia</string>
+    <string name="pref_daydream_color_description">Farba textu a ikon v režime šetriča obrazovky</string>
+    <string name="pref_daydream_night_mode_title">Nočný režim</string>
+    <string name="pref_daydream_night_mode_description">Veľmi matný displej (pre tmavé miestnosti)</string>
+    <string name="pref_daydream_animation_title">Animácia</string>
+    <string-array name="pref_daydream_animation_display_names">
+        <item>Kyvadlo (predvolené)</item>
+        <item>Posúvanie</item>
+        <item>Blednutie</item>
+        <item>Žiadna (môže dôjsť k poškodeniu obrazovky)</item>
+    </string-array>
+    <string name="pref_daydream_system_settings_title">Systémové nastavenia šetriča obrazovky</string>
+
+    <!-- World readability -->
+    <string name="pref_force_world_readable_title">Povoliť ostatným aplikáciám zobrazenie všetkých rozšírení</string>
+    <string name="pref_force_world_readable_description">Povoliť ostatným aplikáciám zobrazenie informácií zo všetkých rozšírení, vrátane kalendára, kontaktov, atď.</string>
+
+    <string name="force_world_readable_dialog_description">Iná aplikácia požaduje zobrazenie informácií zo všetkých vašich DashClock rozšírení vrátane tých súkromných, ako sú kalendár, kontakty, atď. Chcete <b>povoliť túto funkciu pre všetky aplikácie</b>?</string>
+
+    <string name="force_world_readable_dialog_no">Zrušiť</string>
+    <string name="force_world_readable_dialog_yes">Povoliť pre všetky aplikácie</string>
+
+</resources>

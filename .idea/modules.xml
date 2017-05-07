@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dashclock-api/dashclock-api.iml" filepath="$PROJECT_DIR$/dashclock-api/dashclock-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/module-dashclock/module-dashclock.iml" filepath="$PROJECT_DIR$/module-dashclock/module-dashclock.iml" />
       <module fileurl="file://$PROJECT_DIR$/module-muzei/module-muzei.iml" filepath="$PROJECT_DIR$/module-muzei/module-muzei.iml" />
       <module fileurl="file://$PROJECT_DIR$/muzei-android-client-common/muzei-android-client-common.iml" filepath="$PROJECT_DIR$/muzei-android-client-common/muzei-android-client-common.iml" />
