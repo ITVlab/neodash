@@ -59,13 +59,8 @@ public class DemoActivity extends Activity {
         mImageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         setContentView(mImageView);
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            obtainArtwork();
-            RecommendationBuilder.maybeShowNewArtworkNotification(this); // Add notification
-        } else {
-            obtainArtwork();
-            RecommendationBuilder.maybeShowNewArtworkNotification(this); // Add notification
-        }
+        obtainArtwork();
+        RecommendationBuilder.maybeShowNewArtworkNotification(this); // Add notification
     }
 
     @Override

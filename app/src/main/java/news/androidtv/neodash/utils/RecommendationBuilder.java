@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.support.v4.app.NotificationCompat;
@@ -40,7 +41,9 @@ import java.util.List;
  */
 public class RecommendationBuilder {
     private static final String TAG = RecommendationBuilder.class.getSimpleName();
+
     public static final String PREF_ENABLED = "new_wallpaper_notification_enabled";
+
     private static final String PREF_LAST_READ_NOTIFICATION_ARTWORK_ID
             = "last_read_notification_artwork_id";
     private static final String PREF_LAST_READ_NOTIFICATION_ARTWORK_IMAGE_URI
@@ -109,10 +112,10 @@ public class RecommendationBuilder {
         previouslyDismissedNotification = previouslyDismissedNotification ||
                 (!TextUtils.isEmpty(lastReadToken) && !TextUtils.isEmpty(currentToken) &&
                         TextUtils.equals(lastReadToken, currentToken));
-        if (previouslyDismissedNotification) {
+/*        if (previouslyDismissedNotification) {
             artwork.close();
             return;
-        }
+        }*/
 
         Bitmap largeIcon;
         Bitmap background;
@@ -145,6 +148,10 @@ public class RecommendationBuilder {
         String title = TextUtils.isEmpty(artworkTitle)
                 ? context.getString(net.nurik.roman.muzei.R.string.app_name)
                 : artworkTitle;
+
+        Bundle extras = new Bundle();
+        extras.putString(Notification.EXTRA_BACKGROUND_IMAGE_URI, String.valueOf(MuzeiContract.Artwork.CONTENT_URI));
+
         NotificationCompat.Builder nb = new NotificationCompat.Builder(context)
                 .setSmallIcon(net.nurik.roman.muzei.R.drawable.ic_stat_muzei)
                 .setColor(ContextCompat.getColor(context, net.nurik.roman.muzei.R.color.notification))
@@ -154,6 +161,7 @@ public class RecommendationBuilder {
                 .setContentTitle(title)
                 .setContentText(context.getString(net.nurik.roman.muzei.R.string.notification_new_wallpaper))
                 .setLargeIcon(largeIcon)
+                .setExtras(extras)
                 .setContentIntent(PendingIntent.getActivity(context, 0,
                         Intent.makeMainActivity(new ComponentName(context, MuzeiActivity.class)),
                         PendingIntent.FLAG_UPDATE_CURRENT))
