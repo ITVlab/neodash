@@ -1,6 +1,5 @@
 package news.androidtv.neodash.activities;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
@@ -10,7 +9,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.BaseColumns;
@@ -27,11 +25,11 @@ import com.google.android.apps.muzei.sync.DownloadArtworkJobService;
 
 import java.io.FileNotFoundException;
 
-import news.androidtv.neodash.Manifest;
 import news.androidtv.neodash.utils.RecommendationBuilder;
 
 /**
  * Created by Nick on 5/6/2017.
+ * Simply displays current wallpaper.
  */
 
 public class DemoActivity extends Activity {
@@ -97,7 +95,6 @@ public class DemoActivity extends Activity {
         String currentToken = artwork.getString(artwork.getColumnIndex(MuzeiContract.Artwork.COLUMN_NAME_TOKEN));
         Log.d(TAG, "Standard content uri is " + MuzeiContract.Artwork.CONTENT_URI);
 
-        Bitmap largeIcon;
         Bitmap background;
         try {
             BitmapFactory.Options options = new BitmapFactory.Options();
@@ -111,8 +108,6 @@ public class DemoActivity extends Activity {
             int largeIconHeight = getResources()
                     .getDimensionPixelSize(android.R.dimen.notification_large_icon_height);
             options.inSampleSize = ImageUtil.calculateSampleSize(shortestLength, largeIconHeight);
-            largeIcon = BitmapFactory.decodeStream(contentResolver.openInputStream(
-                    MuzeiContract.Artwork.CONTENT_URI), null, options);
 
             // Use the suggested 1920x1080 for Android TV background images
             options.inSampleSize = ImageUtil.calculateSampleSize(height, 1080);

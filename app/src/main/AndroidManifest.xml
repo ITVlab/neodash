@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="news.androidtv.neodash">
@@ -14,7 +15,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- Don't request this starting with Marshmallow (we only write to the app's cache folder) -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="22" />
 
     <application
@@ -24,20 +26,34 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Neodash.AppTheme"
         tools:replace="android:theme">
-
-        <activity android:name="news.androidtv.neodash.activities.StartupActivity"
+        <activity
+            android:name=".activities.StartupActivity"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.DemoActivity"
+            android:exported="true" />
 
-        <activity android:name=".activities.DemoActivity"
-            android:exported="true"
-            />
-
+        <!-- This service is only used on devices with API v17+ -->
+        <service
+            android:name=".NeodashDreamService"
+            android:label="NeoDash Screensaver"
+            android:permission="android.permission.BIND_DREAM_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.dreams.DreamService" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.dream"
+                android:resource="@xml/dream_service" />
+        </service>
     </application>
 
 </manifest>
