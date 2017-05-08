@@ -54,6 +54,13 @@
                 android:name="android.service.dream"
                 android:resource="@xml/dream_service" />
         </service>
+
+        <!-- Disables DashClock dream -->
+        <service
+            android:name="com.google.android.apps.dashclock.DaydreamService"
+            android:exported="true"
+            android:enabled="false"
+            android:permission="android.permission.BIND_DREAM_SERVICE" />
     </application>
 
 </manifest>

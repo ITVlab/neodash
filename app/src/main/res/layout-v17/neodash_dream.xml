@@ -10,11 +10,54 @@
         android:layout_height="match_parent"
         android:contentDescription="Current Wallpaper" />
 
+    <!-- DashClock View -->
+    <view
+        class="com.google.android.apps.dashclock.DaydreamService$RootLayout"
+        android:id="@+id/daydream_root"
+        android:elevation="5dp"
+        android:layout_width="540dp"
+        android:gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_height="match_parent">
+
+        <!--suppress AndroidLintUselessParent -->
+        <LinearLayout android:id="@+id/daydream_container"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:paddingTop="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="16dp"
+            android:gravity="bottom|center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/widget_include_clock" />
+
+            <view class="com.google.android.apps.dashclock.DaydreamService$ExposedScrollView"
+                android:id="@+id/extensions_scroller"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:requiresFadingEdge="vertical"
+                android:fadingEdgeLength="@dimen/list_fading_edge_length"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <LinearLayout android:id="@+id/extensions_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" />
+            </view>
+        </LinearLayout>
+    </view>
+
     <TextClock
         android:id="@+id/textClock"
         android:layout_width="wrap_content"
         android:textSize="24sp"
         android:paddingEnd="48dp"
+        android:visibility="gone"
         android:fontFamily="serif"
         android:paddingBottom="32dp"
         android:layout_alignParentBottom="true"

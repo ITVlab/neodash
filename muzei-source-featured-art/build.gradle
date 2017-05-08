@@ -24,6 +24,7 @@ dependencies {
     compile project(':muzei-api')
     compile "com.squareup.okhttp3:okhttp:$rootProject.ext.okhttpVersion"
     compile "com.android.support:customtabs:$rootProject.ext.supportLibraryVersion"
+    testCompile 'junit:junit:4.12'
 }
 
 android {

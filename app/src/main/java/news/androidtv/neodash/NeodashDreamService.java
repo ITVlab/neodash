@@ -7,6 +7,8 @@ import java.util.Random;
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.annotation.TargetApi;
 import android.content.ComponentName;
@@ -15,9 +17,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Handler;
@@ -26,19 +30,35 @@ import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.service.dreams.DreamService;
 import android.support.v7.graphics.Palette;
+import android.support.v7.graphics.Target;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
+import android.view.ViewTreeObserver;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.apps.dashclock.DashClockService;
+import com.google.android.apps.dashclock.DaydreamService;
+import com.google.android.apps.dashclock.ExtensionManager;
+import com.google.android.apps.dashclock.PeriodicExtensionRefreshReceiver;
+import com.google.android.apps.dashclock.Utils;
+import com.google.android.apps.dashclock.WidgetClickProxyActivity;
+import com.google.android.apps.dashclock.render.DashClockRenderer;
+import com.google.android.apps.dashclock.render.SimpleRenderer;
+import com.google.android.apps.dashclock.render.SimpleViewBuilder;
 import com.google.android.apps.muzei.api.MuzeiContract;
 import com.google.android.apps.muzei.render.ImageUtil;
 
 import org.w3c.dom.Text;
 
 import static android.support.v7.graphics.Palette.from;
+import static com.google.android.apps.dashclock.Utils.SECONDS_MILLIS;
 
 /**
  * This class is a sample implementation of a DreamService. When activated, a
@@ -47,11 +67,40 @@ import static android.support.v7.graphics.Palette.from;
  * <p/>
  * Daydreams are only available on devices running API v17+.
  */
+/* Extends DashClock's dreamservice */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-public class NeodashDreamService extends DreamService {
+public class NeodashDreamService extends DreamService implements
+        ExtensionManager.OnChangeListener {
     private static final String TAG = NeodashDreamService.class.getSimpleName();
 
+    private ExtensionManager mExtensionManager;
+    private Handler mHandler = new Handler();
+    private ViewGroup mDaydreamContainer;
+    private ViewGroup mExtensionsContainer;
+    private AnimatorSet mSingleCycleAnimator;
+
     private boolean isDreaming = false;
+    private boolean mAttached;
+    private boolean mNeedsRelayout;
+    private boolean mMovingLeft;
+    private boolean mManuallyAwoken;
+    private int mTravelDistance;
+    private int mForegroundColor;
+    private int mAnimation;
+
+    private static final int ANIMATION_HAS_ROTATE = 0x1;
+    private static final int ANIMATION_HAS_SLIDE = 0x2;
+    private static final int ANIMATION_HAS_FADE = 0x4;
+
+    private static final int ANIMATION_NONE = 0;
+    private static final int ANIMATION_FADE = ANIMATION_HAS_FADE;
+    private static final int ANIMATION_SLIDE = ANIMATION_FADE | ANIMATION_HAS_SLIDE;
+    private static final int ANIMATION_PENDULUM = ANIMATION_SLIDE | ANIMATION_HAS_ROTATE;
+
+    private static final int CYCLE_INTERVAL_MILLIS = 20 * SECONDS_MILLIS;
+    private static final int FADE_MILLIS = 5 * SECONDS_MILLIS;
+    private static final int TRAVEL_ROTATE_DEGREES = 3;
+    private static final float SCALE_WHEN_MOVING = 0.85f;
 
     @Override
     public void onAttachedToWindow() {
@@ -69,6 +118,14 @@ public class NeodashDreamService extends DreamService {
         // Set the content view, just like you would with an Activity.
         setContentView(R.layout.neodash_dream);
         Log.d(TAG, "Attaching to window");
+
+        mExtensionManager = ExtensionManager.getInstance(this);
+        mExtensionManager.addOnChangeListener(this);
+
+        // Update extensions and ensure the periodic refresh is set up.
+        PeriodicExtensionRefreshReceiver.updateExtensionsAndEnsurePeriodicRefresh(this);
+
+        mAttached = true;
     }
 
     @Override
@@ -94,6 +151,7 @@ public class NeodashDreamService extends DreamService {
             @Override
             public void run() {
                 showWallpaper();
+                showDashclock();
                 if (isDreaming) {
                     handler.postDelayed(this, 1000 * 60 * 15); // 15 min
                 }
@@ -114,9 +172,10 @@ public class NeodashDreamService extends DreamService {
     @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-
-        // TODO: Dismantle resources
-        // (for example, detach from handlers and listeners).
+        mExtensionManager.removeOnChangeListener(this);
+        mExtensionManager = null;
+        mHandler.removeCallbacksAndMessages(null);
+        mAttached = false;
     }
 
     private void showWallpaper() {
@@ -148,12 +207,16 @@ public class NeodashDreamService extends DreamService {
             Log.e(TAG, "Unable to read artwork to show notification", e);
             return;
         }
+
+        Log.d(TAG, "Show artwork " + MuzeiContract.Artwork.CONTENT_URI);
         wallpaper.setImageBitmap(background);
+//        wallpaper.setVisibility(View.INVISIBLE);
         showArtworkInfo(background);
     }
 
     private void showArtworkInfo(Bitmap artBitmap) {
         if (!isDreaming) {
+            Log.d(TAG, "We are not dreaming");
             return; // Exit.
         }
         // Show artwork metadata on left.
@@ -196,12 +259,221 @@ public class NeodashDreamService extends DreamService {
         // Show time on right.
 
         // Get the proper colors.
-        Palette palette = Palette.from(artBitmap).generate();
+        Log.d(TAG, "Artwork bitmap: " + artBitmap.getWidth() + "x" + artBitmap.getHeight());
+        Palette palette = Palette.from(artBitmap).setRegion(32, 920, 1920 - 32, 1080).generate();
         Palette.Swatch colors = palette.getSwatches().get(0);
 
         ((TextView) findViewById(R.id.artwork_name)).setTextColor(colors.getBodyTextColor());
         ((TextView) findViewById(R.id.artwork_artist)).setTextColor(colors.getTitleTextColor());
         ((TextView) findViewById(R.id.artwork_source)).setTextColor(colors.getTitleTextColor());
         ((TextView) findViewById(R.id.textClock)).setTextColor(colors.getBodyTextColor());
+
+        renderDaydream(false, colors.getBodyTextColor());
+    }
+
+    private void showDashclock() {
+        Log.d(TAG, "Draw Dashclock");
+    }
+
+    private void renderDaydream(final boolean restartAnimation, int textColor) {
+        if (!mAttached || mExtensionManager == null) {
+            return;
+        }
+        final Resources res = getResources();
+
+        mDaydreamContainer = (ViewGroup) findViewById(R.id.daydream_container);
+        DaydreamService.RootLayout rootContainer = (DaydreamService.RootLayout)
+                findViewById(R.id.daydream_root);
+
+        rootContainer.setRootLayoutListener(new DaydreamService.RootLayout.RootLayoutListener() {
+            @Override
+            public void onAwake() {
+                Log.d(TAG, "Dream awaken");
+                /*mManuallyAwoken = true;
+                setFullscreen(false);
+                mHandler.removeCallbacks(mCycleRunnable);
+                mHandler.postDelayed(mCycleRunnable, CYCLE_INTERVAL_MILLIS);
+                mDaydreamContainer.animate()
+                        .alpha(1f)
+                        .rotation(0)
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .translationX(0f)
+                        .translationY(0f)
+                        .setDuration(res.getInteger(android.R.integer.config_shortAnimTime));
+                if (mSingleCycleAnimator != null) {
+                    mSingleCycleAnimator.cancel();
+                }*/
+            }
+
+            @Override
+            public boolean isAwake() {
+                return mManuallyAwoken;
+            }
+
+            @Override
+            public void onSizeChanged(int width, int height) {
+                Log.d(TAG, "Size changed to " + width + "x" + height);
+                mTravelDistance = width / 4;
+            }
+        });
+
+        // Animate container into view
+        mManuallyAwoken = true;
+        setFullscreen(false);
+        mDaydreamContainer.animate()
+                .alpha(1f)
+                .rotation(0)
+                .scaleX(1f)
+                .scaleY(1f)
+                .translationX(0f)
+                .translationY(0f)
+                .setDuration(res.getInteger(android.R.integer.config_shortAnimTime));
+        if (mSingleCycleAnimator != null) {
+            mSingleCycleAnimator.cancel();
+        }
+
+
+        DisplayMetrics displayMetrics = res.getDisplayMetrics();
+        Log.d(TAG, "Screen info " + displayMetrics.widthPixels + "x" + displayMetrics.heightPixels +
+                " at " + displayMetrics.density + "dpi");
+
+        int screenWidthDp = (int) (displayMetrics.widthPixels * 1f / displayMetrics.density);
+        int screenHeightDp = (int) (displayMetrics.heightPixels * 1f / displayMetrics.density);
+
+        // Set up rendering
+        SimpleRenderer renderer = new SimpleRenderer(this);
+        DashClockRenderer.Options options = new DashClockRenderer.Options();
+        options.target = DashClockRenderer.Options.TARGET_DAYDREAM;
+        options.foregroundColor = textColor;
+        options.minWidthDp = screenWidthDp;
+        options.minHeightDp = screenHeightDp;
+        Log.d(TAG, "Options: " + options.minWidthDp + "x" + options.minHeightDp);
+        options.newTaskOnClick = true;
+        options.onClickListener = null;
+        options.clickIntentTemplate = WidgetClickProxyActivity.getTemplate(this);
+        renderer.setOptions(options);
+
+        // Render the clock face
+        SimpleViewBuilder vb = renderer.createSimpleViewBuilder();
+        vb.useRoot(mDaydreamContainer);
+        renderer.renderClockFace(vb, options.foregroundColor);
+        vb.setLinearLayoutGravity(R.id.clock_target, Gravity.CENTER_HORIZONTAL);
+        findViewById(R.id.clock_target).setVisibility(View.VISIBLE);
+        Log.d(TAG, "Draw clock");
+
+        // Render extensions
+        mExtensionsContainer = (ViewGroup) findViewById(R.id.extensions_container);
+        mExtensionsContainer.removeAllViews();
+        List<ExtensionManager.ExtensionWithData> visibleExtensions
+                = mExtensionManager.getVisibleExtensionsWithData();
+        Log.d(TAG, "Handle " + visibleExtensions.size() + " extensions");
+        for (ExtensionManager.ExtensionWithData ewd : visibleExtensions) {
+            Log.d(TAG, "Inflate extension " + ewd.listing.title());
+            mExtensionsContainer.addView(
+                    (View) renderer.renderExpandedExtension(mExtensionsContainer, null, false,
+                            ewd));
+        }
+
+        if (mDaydreamContainer.getHeight() == 0 || mNeedsRelayout) {
+            Log.d(TAG, "Something is changing");
+            ViewTreeObserver vto = mDaydreamContainer.getViewTreeObserver();
+            if (vto.isAlive()) {
+                vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        ViewTreeObserver vto = mDaydreamContainer.getViewTreeObserver();
+                        if (vto.isAlive()) {
+                            vto.removeOnGlobalLayoutListener(this);
+                        }
+                        Log.d(TAG, "restart animation...");
+                        postLayoutRender(restartAnimation);
+                    }
+                });
+            }
+            mDaydreamContainer.requestLayout();
+            mNeedsRelayout = false;
+        } else {
+            Log.d(TAG, "postLayoutRender");
+            postLayoutRender(restartAnimation);
+        }
+    }
+
+    /**
+     * Post-layout render code.
+     */
+    public void postLayoutRender(boolean restartAnimation) {
+        // Adjust the ScrollView
+        DaydreamService.ExposedScrollView scrollView = (DaydreamService.ExposedScrollView) findViewById(R.id.extensions_scroller);
+        int maxScroll = scrollView.computeVerticalScrollRange() - scrollView.getHeight();
+        if (maxScroll < 0) {
+            ViewGroup.LayoutParams lp = scrollView.getLayoutParams();
+            lp.height = mExtensionsContainer.getHeight();
+            scrollView.setLayoutParams(lp);
+            mDaydreamContainer.requestLayout();
+        }
+
+        // Recolor widget
+//        Utils.traverseAndRecolor(mDaydreamContainer, mForegroundColor, true, true);
+
+        /* if (restartAnimation) {
+            int x = 0;
+            int deg = 0;
+            if ((mAnimation & ANIMATION_HAS_SLIDE) != 0) {
+                x = (mMovingLeft ? 1 : -1) * mTravelDistance;
+            }
+            if ((mAnimation & ANIMATION_HAS_ROTATE) != 0) {
+                deg = (mMovingLeft ? 1 : -1) * TRAVEL_ROTATE_DEGREES;
+            }
+            mMovingLeft = !mMovingLeft;
+            mDaydreamContainer.animate().cancel();
+            if ((mAnimation & ANIMATION_HAS_SLIDE) != 0) {
+                // Only use small size when moving
+                mDaydreamContainer.setScaleX(SCALE_WHEN_MOVING);
+                mDaydreamContainer.setScaleY(SCALE_WHEN_MOVING);
+            }
+            if (mSingleCycleAnimator != null) {
+                mSingleCycleAnimator.cancel();
+            }
+
+            Animator scrollDownAnimator = ObjectAnimator.ofInt(scrollView,
+                    DaydreamService.ExposedScrollView.SCROLL_POS, 0, maxScroll);
+            scrollDownAnimator.setDuration(CYCLE_INTERVAL_MILLIS / 5);
+            scrollDownAnimator.setStartDelay(CYCLE_INTERVAL_MILLIS / 5);
+
+            Animator scrollUpAnimator = ObjectAnimator.ofInt(scrollView,
+                    DaydreamService.ExposedScrollView.SCROLL_POS, 0);
+            scrollUpAnimator.setDuration(CYCLE_INTERVAL_MILLIS / 5);
+            scrollUpAnimator.setStartDelay(CYCLE_INTERVAL_MILLIS / 5);
+
+            AnimatorSet scrollAnimator = new AnimatorSet();
+            scrollAnimator.playSequentially(scrollDownAnimator, scrollUpAnimator);
+
+            Animator moveAnimator = ObjectAnimator.ofFloat(mDaydreamContainer,
+                    View.TRANSLATION_X, x, -x).setDuration(CYCLE_INTERVAL_MILLIS);
+            moveAnimator.setInterpolator(new LinearInterpolator());
+
+            Animator rotateAnimator = ObjectAnimator.ofFloat(mDaydreamContainer,
+                    View.ROTATION, deg, -deg).setDuration(CYCLE_INTERVAL_MILLIS);
+            moveAnimator.setInterpolator(new LinearInterpolator());
+
+            mSingleCycleAnimator = new AnimatorSet();
+            mSingleCycleAnimator.playTogether(scrollAnimator, moveAnimator, rotateAnimator);
+            mSingleCycleAnimator.start();
+        } */
+    }
+
+    private Runnable mHandleExtensionsChanged = new Runnable() {
+        @Override
+        public void run() {
+            renderDaydream(false, Color.WHITE);
+        }
+    };
+
+    @Override
+    public void onExtensionsChanged(ComponentName sourceExtension) {
+        mHandler.removeCallbacks(mHandleExtensionsChanged);
+        mHandler.postDelayed(mHandleExtensionsChanged,
+                DashClockService.UPDATE_COLLAPSE_TIME_MILLIS);
     }
 }

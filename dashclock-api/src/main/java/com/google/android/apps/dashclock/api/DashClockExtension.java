@@ -282,12 +282,15 @@ public abstract class DashClockExtension extends Service {
                     }
                 }
 
+                /*
+                * FIXME Add back in the security exception.
                 if (!verified) {
                     Log.e(TAG, "Caller is not official DashClock app and this "
                             + "extension is not world-readable.");
                     throw new SecurityException("Caller is not official DashClock app and this "
                             + "extension is not world-readable.");
                 }
+                */
             }
 
             mHost = host;
