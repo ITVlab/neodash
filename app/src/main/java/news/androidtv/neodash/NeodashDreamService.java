@@ -1,6 +1,7 @@
 package news.androidtv.neodash;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Random;
 
 import android.animation.Animator;
@@ -8,8 +9,13 @@ import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.TimeInterpolator;
 import android.annotation.TargetApi;
+import android.content.ComponentName;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
@@ -17,7 +23,9 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.provider.BaseColumns;
 import android.service.dreams.DreamService;
+import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewPropertyAnimator;
@@ -27,6 +35,10 @@ import android.widget.TextView;
 
 import com.google.android.apps.muzei.api.MuzeiContract;
 import com.google.android.apps.muzei.render.ImageUtil;
+
+import org.w3c.dom.Text;
+
+import static android.support.v7.graphics.Palette.from;
 
 /**
  * This class is a sample implementation of a DreamService. When activated, a
@@ -137,5 +149,59 @@ public class NeodashDreamService extends DreamService {
             return;
         }
         wallpaper.setImageBitmap(background);
+        showArtworkInfo(background);
+    }
+
+    private void showArtworkInfo(Bitmap artBitmap) {
+        if (!isDreaming) {
+            return; // Exit.
+        }
+        // Show artwork metadata on left.
+        ContentResolver contentResolver = getContentResolver();
+        Cursor artwork = contentResolver.query(
+                MuzeiContract.Artwork.CONTENT_URI,
+                new String[] {BaseColumns._ID,
+                        MuzeiContract.Artwork.COLUMN_NAME_TITLE,
+                        MuzeiContract.Artwork.COLUMN_NAME_BYLINE,
+                        MuzeiContract.Artwork.COLUMN_NAME_ATTRIBUTION,
+                        MuzeiContract.Sources.COLUMN_NAME_COMPONENT_NAME,
+                        MuzeiContract.Sources.COLUMN_NAME_DESCRIPTION},
+                null, null, null);
+        if (artwork == null || !artwork.moveToFirst()) {
+            if (artwork != null) {
+                artwork.close();
+            }
+            return;
+        }
+
+        String title = artwork.getString(artwork.getColumnIndex(MuzeiContract.Artwork.COLUMN_NAME_TITLE));
+        String artist = artwork.getString(artwork.getColumnIndex(MuzeiContract.Artwork.COLUMN_NAME_BYLINE));
+        String attribution = artwork.getString(artwork.getColumnIndex(MuzeiContract.Artwork.COLUMN_NAME_ATTRIBUTION));
+        String source = artwork.getString(artwork.getColumnIndex(MuzeiContract.Sources.COLUMN_NAME_DESCRIPTION));
+        String component = artwork.getString(artwork.getColumnIndex(MuzeiContract.Sources.COLUMN_NAME_COMPONENT_NAME));
+        Log.d(TAG, "Source: " + source);
+        Log.d(TAG, "Source2: " + artwork.getString(artwork.getColumnIndex(MuzeiContract.Sources.COLUMN_NAME_COMPONENT_NAME)));
+        // Pull source from package
+        ComponentName componentName = ComponentName.unflattenFromString(component);
+        Intent artworkIntent = new Intent();
+        artworkIntent.setComponent(componentName);
+        List<ResolveInfo> artworkSources = getPackageManager().queryIntentServices(artworkIntent, PackageManager.MATCH_ALL);
+        Log.d(TAG, "Found " + artworkSources.size());
+
+        ((TextView) findViewById(R.id.artwork_name)).setText(title);
+        ((TextView) findViewById(R.id.artwork_artist)).setText(artist + "\n" + attribution);
+        if (artworkSources.size() >= 1) {
+            ((TextView) findViewById(R.id.artwork_source)).setText(artworkSources.get(0).loadLabel(getPackageManager()));
+        }
+        // Show time on right.
+
+        // Get the proper colors.
+        Palette palette = Palette.from(artBitmap).generate();
+        Palette.Swatch colors = palette.getSwatches().get(0);
+
+        ((TextView) findViewById(R.id.artwork_name)).setTextColor(colors.getBodyTextColor());
+        ((TextView) findViewById(R.id.artwork_artist)).setTextColor(colors.getTitleTextColor());
+        ((TextView) findViewById(R.id.artwork_source)).setTextColor(colors.getTitleTextColor());
+        ((TextView) findViewById(R.id.textClock)).setTextColor(colors.getBodyTextColor());
     }
 }
