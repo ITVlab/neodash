@@ -42,7 +42,7 @@
 
         <!-- This service is only used on devices with API v17+ -->
         <service
-            android:name=".NeodashDreamService"
+            android:name=".services.NeodashDreamService"
             android:label="NeoDash Screensaver"
             android:permission="android.permission.BIND_DREAM_SERVICE"
             android:exported="true">
@@ -61,6 +61,38 @@
             android:exported="true"
             android:enabled="false"
             android:permission="android.permission.BIND_DREAM_SERVICE" />
+
+        <!-- Disable some built-in DashClock extensions that won't work on TVs -->
+        <service android:name="com.google.android.apps.dashclock.calendar.CalendarExtension"
+            android:enabled="false" />
+        <service android:name="com.google.android.apps.dashclock.nextalarm.NextAlarmExtension"
+            android:enabled="false" />
+        <service android:name="com.google.android.apps.dashclock.weather.WeatherExtension"
+            android:enabled="false" />
+
+        <!-- Include new TV-specific widgets -->
+        <service
+            android:name=".extensions.debug.DummyExtension"
+            android:label="Dummy Extension"
+            android:icon="@drawable/ic_action_done"
+            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA">
+            <intent-filter android:priority="100">
+                <action android:name="com.google.android.apps.dashclock.Extension" />
+            </intent-filter>
+
+            <meta-data android:name="protocolVersion"
+                android:value="@integer/current_extension_protocol_version" />
+            <meta-data android:name="worldReadable" android:value="true" />
+            <meta-data android:name="description"
+                android:value="Shows some text and it's easy." />
+            <meta-data android:name="settingsActivity"
+                android:value="news.androidtv.neodash.extensions.debug.DummySettingsActivity" />
+        </service>
+
+        <activity
+            android:theme="@style/Theme.ExtensionConfiguration"
+            android:name=".extensions.debug.DummySettingsActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

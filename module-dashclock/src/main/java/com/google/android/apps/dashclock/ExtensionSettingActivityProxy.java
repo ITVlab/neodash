@@ -58,6 +58,12 @@ public class ExtensionSettingActivityProxy extends Activity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        setVisible(true); // Workaround to prevent crash
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RESULT_EXTENSION_SETTINGS) {
             final LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);

@@ -1,20 +1,13 @@
-package news.androidtv.neodash;
+package news.androidtv.neodash.services;
 
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Random;
 
-import android.animation.Animator;
-import android.animation.Animator.AnimatorListener;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.TimeInterpolator;
 import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
@@ -22,24 +15,19 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.service.dreams.DreamService;
 import android.support.v7.graphics.Palette;
-import android.support.v7.graphics.Target;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
 import android.view.ViewTreeObserver;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -47,7 +35,6 @@ import com.google.android.apps.dashclock.DashClockService;
 import com.google.android.apps.dashclock.DaydreamService;
 import com.google.android.apps.dashclock.ExtensionManager;
 import com.google.android.apps.dashclock.PeriodicExtensionRefreshReceiver;
-import com.google.android.apps.dashclock.Utils;
 import com.google.android.apps.dashclock.WidgetClickProxyActivity;
 import com.google.android.apps.dashclock.render.DashClockRenderer;
 import com.google.android.apps.dashclock.render.SimpleRenderer;
@@ -55,7 +42,7 @@ import com.google.android.apps.dashclock.render.SimpleViewBuilder;
 import com.google.android.apps.muzei.api.MuzeiContract;
 import com.google.android.apps.muzei.render.ImageUtil;
 
-import org.w3c.dom.Text;
+import news.androidtv.neodash.R;
 
 import static android.support.v7.graphics.Palette.from;
 import static com.google.android.apps.dashclock.Utils.SECONDS_MILLIS;
@@ -77,30 +64,17 @@ public class NeodashDreamService extends DreamService implements
     private Handler mHandler = new Handler();
     private ViewGroup mDaydreamContainer;
     private ViewGroup mExtensionsContainer;
-    private AnimatorSet mSingleCycleAnimator;
 
     private boolean isDreaming = false;
     private boolean mAttached;
     private boolean mNeedsRelayout;
-    private boolean mMovingLeft;
     private boolean mManuallyAwoken;
-    private int mTravelDistance;
-    private int mForegroundColor;
-    private int mAnimation;
 
-    private static final int ANIMATION_HAS_ROTATE = 0x1;
     private static final int ANIMATION_HAS_SLIDE = 0x2;
     private static final int ANIMATION_HAS_FADE = 0x4;
 
-    private static final int ANIMATION_NONE = 0;
     private static final int ANIMATION_FADE = ANIMATION_HAS_FADE;
-    private static final int ANIMATION_SLIDE = ANIMATION_FADE | ANIMATION_HAS_SLIDE;
-    private static final int ANIMATION_PENDULUM = ANIMATION_SLIDE | ANIMATION_HAS_ROTATE;
 
-    private static final int CYCLE_INTERVAL_MILLIS = 20 * SECONDS_MILLIS;
-    private static final int FADE_MILLIS = 5 * SECONDS_MILLIS;
-    private static final int TRAVEL_ROTATE_DEGREES = 3;
-    private static final float SCALE_WHEN_MOVING = 0.85f;
 
     @Override
     public void onAttachedToWindow() {
@@ -268,17 +242,23 @@ public class NeodashDreamService extends DreamService implements
         ((TextView) findViewById(R.id.artwork_source)).setTextColor(colors.getTitleTextColor());
         ((TextView) findViewById(R.id.textClock)).setTextColor(colors.getBodyTextColor());
 
-        renderDaydream(false, colors.getBodyTextColor());
+        renderDashclock(false, colors.getBodyTextColor());
     }
 
     private void showDashclock() {
         Log.d(TAG, "Draw Dashclock");
     }
 
-    private void renderDaydream(final boolean restartAnimation, int textColor) {
+    private int mTextColor = Color.WHITE;
+    private void renderDashclock(final boolean restartAnimation) {
+        renderDashclock(restartAnimation, mTextColor);
+    }
+
+    private void renderDashclock(final boolean restartAnimation, int textColor) {
         if (!mAttached || mExtensionManager == null) {
             return;
         }
+        mTextColor = textColor;
         final Resources res = getResources();
 
         mDaydreamContainer = (ViewGroup) findViewById(R.id.daydream_container);
@@ -314,7 +294,6 @@ public class NeodashDreamService extends DreamService implements
             @Override
             public void onSizeChanged(int width, int height) {
                 Log.d(TAG, "Size changed to " + width + "x" + height);
-                mTravelDistance = width / 4;
             }
         });
 
@@ -329,10 +308,6 @@ public class NeodashDreamService extends DreamService implements
                 .translationX(0f)
                 .translationY(0f)
                 .setDuration(res.getInteger(android.R.integer.config_shortAnimTime));
-        if (mSingleCycleAnimator != null) {
-            mSingleCycleAnimator.cancel();
-        }
-
 
         DisplayMetrics displayMetrics = res.getDisplayMetrics();
         Log.d(TAG, "Screen info " + displayMetrics.widthPixels + "x" + displayMetrics.heightPixels +
@@ -357,7 +332,7 @@ public class NeodashDreamService extends DreamService implements
         // Render the clock face
         SimpleViewBuilder vb = renderer.createSimpleViewBuilder();
         vb.useRoot(mDaydreamContainer);
-        renderer.renderClockFace(vb, options.foregroundColor);
+        renderer.renderClockFace(vb, textColor);
         vb.setLinearLayoutGravity(R.id.clock_target, Gravity.CENTER_HORIZONTAL);
         findViewById(R.id.clock_target).setVisibility(View.VISIBLE);
         Log.d(TAG, "Draw clock");
@@ -466,7 +441,7 @@ public class NeodashDreamService extends DreamService implements
     private Runnable mHandleExtensionsChanged = new Runnable() {
         @Override
         public void run() {
-            renderDaydream(false, Color.WHITE);
+            renderDashclock(false);
         }
     };
 
