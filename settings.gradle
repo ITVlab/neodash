@@ -1,1 +1,1 @@
-include ':app', ':module-muzei', ':module-dashclock', ':muzei-android-client-common', ':muzei-source-featured-art', ':muzei-source-gallery', ':muzei-api', ':dashclock-api'
+include ':app', ':module-muzei', ':module-dashclock', ':muzei-android-client-common', ':muzei-source-featured-art', ':muzei-source-gallery', ':muzei-api', ':dashclock-api', ':common-resources'

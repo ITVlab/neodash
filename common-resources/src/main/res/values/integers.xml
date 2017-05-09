@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="current_extension_protocol_version">2</integer>
+    <item name="secondary_item" format="float" type="fraction">0.5</item>
+</resources>

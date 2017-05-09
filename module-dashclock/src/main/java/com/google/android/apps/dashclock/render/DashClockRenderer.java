@@ -379,7 +379,7 @@ public abstract class DashClockRenderer {
         if (convertRoot != null) {
             vb.useRoot(convertRoot);
         } else {
-            vb.loadRootLayout(container, R.layout.widget_list_item_expanded_extension);
+            vb.loadRootLayout(container, news.androidtv.common_resources.R.layout.widget_list_item_expanded_extensions);
         }
 
         if (ewd == null || ewd.latestData == null) {

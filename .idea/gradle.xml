@@ -10,6 +10,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/common-resources" />
             <option value="$PROJECT_DIR$/dashclock-api" />
             <option value="$PROJECT_DIR$/module-dashclock" />
             <option value="$PROJECT_DIR$/module-muzei" />

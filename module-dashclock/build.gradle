@@ -34,4 +34,5 @@ dependencies {
     compile "com.google.android.gms:play-services-location:$rootProject.ext.googlePlayServicesVersion"
     compile 'com.mobeta.android.dslv:drag-sort-listview:0.6.1'
     compile project(':dashclock-api')
+    compile project(':common-resources')
 }
