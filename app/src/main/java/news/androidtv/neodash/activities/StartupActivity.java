@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,12 +20,20 @@ import com.google.android.apps.muzei.MuzeiActivity;
 import com.google.android.apps.muzei.MuzeiWallpaperService;
 import com.google.android.apps.muzei.sync.DownloadArtworkJobService;
 
+import news.androidtv.neodash.utils.DefaultSettingsApplier;
+
 /**
  * Created by Nick on 5/6/2017.
  */
 
 public class StartupActivity extends MuzeiActivity {
     private static final int LOAD_ARTWORK_JOB_ID = 1;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        DefaultSettingsApplier.setAllDefaults(this);
+    }
 
     @Override
     protected void setupIntroModeUi() {
@@ -34,8 +43,10 @@ public class StartupActivity extends MuzeiActivity {
             @Override
             public void onClick(View view) {
                 // Start scheduling stuff.
+                startJobService();
                 // Open up some sort of selection UI.
-                // Settings already seem to be dpad-able. Just needs
+
+                // Settings already seem to be dpad-able. Just needs polish.
             }
         });
     }
