@@ -1,23 +1,16 @@
 package news.androidtv.neodash.activities;
 
-import android.app.WallpaperManager;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
-import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.apps.muzei.MuzeiActivity;
-import com.google.android.apps.muzei.MuzeiWallpaperService;
 import com.google.android.apps.muzei.sync.DownloadArtworkJobService;
 
 import news.androidtv.neodash.utils.DefaultSettingsApplier;

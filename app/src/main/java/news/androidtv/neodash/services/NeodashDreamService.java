@@ -234,7 +234,14 @@ public class NeodashDreamService extends DreamService implements
 
         // Get the proper colors.
         Log.d(TAG, "Artwork bitmap: " + artBitmap.getWidth() + "x" + artBitmap.getHeight());
-        Palette palette = Palette.from(artBitmap).setRegion(32, 920, 1920 - 32, 1080).generate();
+        Palette palette;
+        try {
+            palette = Palette.from(artBitmap).setRegion(32, 920, 1920 - 32, 1080).generate();
+        } catch (IllegalArgumentException e) {
+            // The given region must intersect with the Bitmap's dimensions.
+            // Generate on whole thing.
+            palette = Palette.from(artBitmap).generate();
+        }
         Palette.Swatch colors = palette.getSwatches().get(0);
 
         ((TextView) findViewById(R.id.artwork_name)).setTextColor(colors.getBodyTextColor());
