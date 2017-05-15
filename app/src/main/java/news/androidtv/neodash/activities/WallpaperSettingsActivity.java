@@ -35,6 +35,8 @@ import com.google.android.apps.muzei.util.DrawInsetsFrameLayout;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import news.androidtv.neodash.R;
+
 /**
  * Created by Nick on 5/14/2017.
  */
@@ -74,21 +76,14 @@ public class WallpaperSettingsActivity extends AppCompatActivity
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        setContentView(net.nurik.roman.muzei.R.layout.settings_activity);
+        setContentView(R.layout.wallpaper_settings);
+        getSupportActionBar().hide();
 
-        if (getIntent() != null && getIntent().getCategories() != null &&
-                getIntent().getCategories().contains(Notification.INTENT_CATEGORY_NOTIFICATION_PREFERENCES)) {
-            mStartSection = START_SECTION_ADVANCED;
-        }
-
-        // Set up UI widgets
-        setupAppBar();
-
-        ((DrawInsetsFrameLayout) findViewById(net.nurik.roman.muzei.R.id.draw_insets_frame_layout)).setOnInsetsCallback(
+        ((DrawInsetsFrameLayout) findViewById(R.id.draw_insets_frame_layout)).setOnInsetsCallback(
                 new DrawInsetsFrameLayout.OnInsetsCallback() {
                     @Override
                     public void onInsetsChanged(Rect insets) {
-                        View container = findViewById(net.nurik.roman.muzei.R.id.container);
+                        View container = findViewById(R.id.container);
                         ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams)
                                 container.getLayoutParams();
                         lp.leftMargin = insets.left;
@@ -106,6 +101,8 @@ public class WallpaperSettingsActivity extends AppCompatActivity
         mBackgroundAnimator = ObjectAnimator.ofFloat(this, "backgroundOpacity", 0, 1);
         mBackgroundAnimator.setDuration(1000);
         mBackgroundAnimator.start();
+
+        inflateSources();
     }
 
     @Override
@@ -118,122 +115,6 @@ public class WallpaperSettingsActivity extends AppCompatActivity
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-    }
-
-    private void setupAppBar() {
-        mAppBar = (Toolbar) findViewById(net.nurik.roman.muzei.R.id.app_bar);
-        mAppBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onNavigateUp();
-            }
-        });
-
-        final LayoutInflater inflater = LayoutInflater.from(this);
-        Spinner sectionSpinner = (Spinner) findViewById(net.nurik.roman.muzei.R.id.section_spinner);
-        sectionSpinner.setAdapter(new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return SECTION_LABELS.length;
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return SECTION_LABELS[position];
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return position + 1;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                if (convertView == null) {
-                    convertView = inflater.inflate(net.nurik.roman.muzei.R.layout.settings_ab_spinner_list_item,
-                            parent, false);
-                }
-                ((TextView) convertView.findViewById(android.R.id.text1)).setText(
-                        getString(SECTION_LABELS[position]));
-                return convertView;
-            }
-
-            @Override
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                if (convertView == null) {
-                    convertView = inflater.inflate(net.nurik.roman.muzei.R.layout.settings_ab_spinner_list_item_dropdown,
-                            parent, false);
-                }
-                ((TextView) convertView.findViewById(android.R.id.text1)).setText(
-                        getString(SECTION_LABELS[position]));
-                return convertView;
-            }
-        });
-
-        sectionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> spinner, View view, int position, long id) {
-                Class<? extends Fragment> fragmentClass = SECTION_FRAGMENTS[position];
-                Fragment currentFragment = getSupportFragmentManager().findFragmentById(
-                        net.nurik.roman.muzei.R.id.content_container);
-                if (currentFragment != null && fragmentClass.equals(currentFragment.getClass())) {
-                    return;
-                }
-
-                inflateMenuFromFragment(0);
-
-                try {
-                    Fragment newFragment = fragmentClass.newInstance();
-                    getSupportFragmentManager().beginTransaction()
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                            .setTransitionStyle(net.nurik.roman.muzei.R.style.Muzei_SimpleFadeFragmentAnimation)
-                            .replace(net.nurik.roman.muzei.R.id.content_container, newFragment)
-                            .commitAllowingStateLoss();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> spinner) {
-            }
-        });
-
-        sectionSpinner.setSelection(mStartSection);
-
-        inflateMenuFromFragment(0);
-        mAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == net.nurik.roman.muzei.R.id.action_get_more_sources) {
-                    try {
-                        Intent playStoreIntent = new Intent(Intent.ACTION_VIEW,
-                                Uri.parse("http://play.google.com/store/search?q=Muzei&c=apps"))
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-                        preferPackageForIntent(com.google.android.apps.muzei.settings.SettingsActivity.this,
-                                playStoreIntent, PLAY_STORE_PACKAGE_NAME);
-                        startActivity(playStoreIntent);
-                    } catch (ActivityNotFoundException activityNotFoundException1) {
-                        Toast.makeText(com.google.android.apps.muzei.settings.SettingsActivity.this,
-                                net.nurik.roman.muzei.R.string.play_store_not_found, Toast.LENGTH_LONG).show();
-                    }
-                    return true;
-                } else if (item.getItemId() == net.nurik.roman.muzei.R.id.action_about) {
-                    startActivity(new Intent(com.google.android.apps.muzei.settings.SettingsActivity.this, AboutActivity.class));
-                    return true;
-                }
-
-                Fragment currentFragment = getSupportFragmentManager().findFragmentById(
-                        net.nurik.roman.muzei.R.id.content_container);
-                if (currentFragment != null
-                        && currentFragment instanceof com.google.android.apps.muzei.settings.SettingsActivity.SettingsActivityMenuListener) {
-                    ((com.google.android.apps.muzei.settings.SettingsActivity.SettingsActivityMenuListener) currentFragment)
-                            .onSettingsActivityMenuItemClick(item);
-                }
-
-                return false;
-            }
-        });
     }
 
     public static void preferPackageForIntent(Context context, Intent intent, String packageName) {
@@ -285,16 +166,16 @@ public class WallpaperSettingsActivity extends AppCompatActivity
 
         mRenderLocally = renderLocally;
 
-        final View uiContainer = findViewById(net.nurik.roman.muzei.R.id.container);
+        final View uiContainer = findViewById(R.id.container);
         final ViewGroup localRenderContainer = (ViewGroup)
-                findViewById(net.nurik.roman.muzei.R.id.local_render_container);
+                findViewById(R.id.local_render_container);
 
         FragmentManager fm = getSupportFragmentManager();
-        Fragment localRenderFragment = fm.findFragmentById(net.nurik.roman.muzei.R.id.local_render_container);
+        Fragment localRenderFragment = fm.findFragmentById(R.id.local_render_container);
         if (mRenderLocally) {
             if (localRenderFragment == null) {
                 fm.beginTransaction()
-                        .add(net.nurik.roman.muzei.R.id.local_render_container,
+                        .add(R.id.local_render_container,
                                 MuzeiRendererFragment.createInstance(false, false))
                         .commit();
             }
@@ -340,11 +221,29 @@ public class WallpaperSettingsActivity extends AppCompatActivity
         if (menuResId != 0) {
             mAppBar.inflateMenu(menuResId);
         }
-        mAppBar.inflateMenu(net.nurik.roman.muzei.R.menu.settings);
+        mAppBar.inflateMenu(R.menu.settings);
     }
 
-    public interface SettingsActivityMenuListener {
-        void onSettingsActivityMenuItemClick(MenuItem item);
+    private void inflateSources() {
+        Class<? extends Fragment> fragmentClass = SECTION_FRAGMENTS[0];
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(
+                R.id.content_container);
+        if (currentFragment != null && fragmentClass.equals(currentFragment.getClass())) {
+            return;
+        }
+
+        inflateMenuFromFragment(0);
+
+        try {
+            Fragment newFragment = fragmentClass.newInstance();
+            getSupportFragmentManager().beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .setTransitionStyle(net.nurik.roman.muzei.R.style.Muzei_SimpleFadeFragmentAnimation)
+                    .replace(R.id.content_container, newFragment)
+                    .commitAllowingStateLoss();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 

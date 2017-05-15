@@ -50,6 +50,7 @@ public class StartupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         // Check current app status
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         if (!sp.contains(PREF_INIT) || !sp.getBoolean(PREF_INIT, false)) {
@@ -70,6 +71,8 @@ public class StartupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Open activity
+                Intent intent = new Intent(StartupActivity.this, WallpaperSettingsActivity.class);
+                startActivity(intent);
             }
         });
         findViewById(R.id.settings_muzei).setOnFocusChangeListener(mFocusListener);
@@ -138,7 +141,7 @@ public class StartupActivity extends AppCompatActivity {
             localRenderContainer.setVisibility(View.VISIBLE);
             localRenderContainer.animate()
                     .alpha(1)
-                    .setDuration(2000)
+                    .setDuration(1000)
                     .withEndAction(null);
         } else {
             if (localRenderFragment != null) {
