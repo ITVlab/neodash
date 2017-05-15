@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:layout_height="match_parent">
+    <FrameLayout
+        android:id="@+id/local_render_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="match_parent">
+        <Button
+            style="@style/fullscreen_button"
+            android:background="@color/colorPrimary_50_alpha"
+            android:id="@+id/settings_muzei"
+            android:text="Wallpaper Settings" />
+        <Button
+            style="@style/fullscreen_button"
+            android:id="@+id/settings_dashclock"
+            android:text="Dashboard Settings"/>
+        <Button
+            style="@style/fullscreen_button"
+            android:id="@+id/settings_screensaver"
+            android:text="Screensaver Settings" />
+        <Button
+            style="@style/fullscreen_button"
+            android:id="@+id/settings_credits"
+            android:text="About App" />
+    </LinearLayout>
+</FrameLayout>

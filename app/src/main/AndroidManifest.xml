@@ -36,8 +36,13 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.DemoActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".activities.DemoRenderActivity"
             android:exported="true" />
 
         <!-- This service is only used on devices with API v17+ -->
