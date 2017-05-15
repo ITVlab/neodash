@@ -102,8 +102,8 @@ public class StartupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Go to system credits & legal
                 new AlertDialog.Builder(new ContextThemeWrapper(StartupActivity.this, R.style.Theme_AppCompat_Dialog))
-                        .setTitle("About NeoDash")
-                        .setMessage("Based on Roman Nurik's Muzei and DashClock apps.")
+                        .setTitle(R.string.title_about_app)
+                        .setMessage(getString(R.string.about_app))
                         .show();
             }
         });
@@ -120,7 +120,7 @@ public class StartupActivity extends AppCompatActivity {
                             : JobInfo.NETWORK_TYPE_ANY)
                     .build());
         } else {
-            Toast.makeText(this, "This app won't work on your OS version.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.error_api_version_low, Toast.LENGTH_SHORT).show();
         }
     }
 

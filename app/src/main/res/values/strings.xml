@@ -2,4 +2,8 @@
     <string name="app_name">NeoDash</string>
     <string name="snippet_about">NeoDash created by ITV Lab. Open source on GitHub. Based on Muzei and DashClock.</string>
     <string name="snippet_title">NeoDash is a screensaver which lets users customize the wallpaper and widgets that are displayed.\nWallpaper sources and extensions can be added through third-party applications.</string>
+    <string name="about_app">NeoDash created by ITV Lab. Open source on GitHub: http://github.com/itvlab/neodash.\nBased on Muzei and DashClock.\n\nhttps://github.com/romannurik/dashclock\nhttps://github.com/romannurik/muzei\n\nBoth apps are licensed under the Apache License 2.0</string>
+    <string name="title_about_app">About NeoDash</string>
+    <string name="error_api_version_low">This app won\'t work on your OS version.</string>
+    <string name="extension_dummy_text">Here you can have some data.</string>
 </resources>

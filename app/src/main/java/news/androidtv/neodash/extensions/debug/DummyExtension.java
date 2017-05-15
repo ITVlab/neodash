@@ -65,8 +65,8 @@ public class DummyExtension extends DashClockExtension {
     protected void onUpdateData(int reason) {
         publishUpdate(new ExtensionData()
                 .visible(true)
-                .icon(R.drawable.ic_extension_next_alarm)
-                .status("Here you can have some data.")
+                .icon(net.nurik.roman.muzei.R.drawable.ic_ab_done)
+                .status(getString(news.androidtv.neodash.R.string.extension_dummy_text))
                 .clickIntent(null));
     }
 }
