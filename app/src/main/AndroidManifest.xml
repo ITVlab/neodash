@@ -49,6 +49,10 @@
             android:name=".activities.WallpaperSettingsActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".activities.DashboardSettingsActivity"
+            android:exported="true" />
+
         <activity android:name="com.google.android.apps.muzei.settings.SettingsActivity"
             android:exported="true" />
 

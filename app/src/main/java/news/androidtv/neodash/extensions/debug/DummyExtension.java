@@ -16,27 +16,16 @@
 
 package news.androidtv.neodash.extensions.debug;
 
-import android.annotation.TargetApi;
-import android.app.AlarmManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.os.Build;
-import android.preference.PreferenceManager;
-import android.provider.Settings;
-import android.text.TextUtils;
 
 import com.google.android.apps.dashclock.LogUtils;
-import com.google.android.apps.dashclock.Utils;
 import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
-import com.google.android.apps.dashclock.configuration.AppChooserPreference;
 
 import net.nurik.roman.dashclock.R;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**

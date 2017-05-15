@@ -81,6 +81,8 @@ public class StartupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Open activity
+                Intent intent = new Intent(StartupActivity.this, DashboardSettingsActivity.class);
+                startActivity(intent);
             }
         });
         findViewById(R.id.settings_dashclock).setOnFocusChangeListener(mFocusListener);

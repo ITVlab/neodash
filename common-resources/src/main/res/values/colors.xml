@@ -4,4 +4,5 @@
     <color name="theme_primary">#0288D1</color>
     <color name="theme_accent_dark">#00A992</color>
     <color name="theme_accent">#00BFA5</color>
+    <color name="black_50_alpha">#44000000</color>
 </resources>

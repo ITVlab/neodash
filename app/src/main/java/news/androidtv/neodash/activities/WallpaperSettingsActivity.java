@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.google.android.apps.muzei.event.WallpaperActiveStateChangedEvent;
 import com.google.android.apps.muzei.render.MuzeiRendererFragment;
 import com.google.android.apps.muzei.settings.AboutActivity;
+import com.google.android.apps.muzei.settings.SettingsActivity;
 import com.google.android.apps.muzei.settings.SettingsAdvancedFragment;
 import com.google.android.apps.muzei.settings.SettingsChooseSourceFragment;
 import com.google.android.apps.muzei.util.DrawInsetsFrameLayout;
@@ -76,8 +77,15 @@ public class WallpaperSettingsActivity extends AppCompatActivity
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+
         setContentView(R.layout.wallpaper_settings);
         getSupportActionBar().hide();
+        findViewById(R.id.button_sources).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                seekMoreSources();
+            }
+        });
 
         ((DrawInsetsFrameLayout) findViewById(R.id.draw_insets_frame_layout)).setOnInsetsCallback(
                 new DrawInsetsFrameLayout.OnInsetsCallback() {
@@ -99,7 +107,7 @@ public class WallpaperSettingsActivity extends AppCompatActivity
         }
 
         mBackgroundAnimator = ObjectAnimator.ofFloat(this, "backgroundOpacity", 0, 1);
-        mBackgroundAnimator.setDuration(1000);
+        mBackgroundAnimator.setDuration(100);
         mBackgroundAnimator.start();
 
         inflateSources();
@@ -115,6 +123,20 @@ public class WallpaperSettingsActivity extends AppCompatActivity
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+    }
+
+    private void seekMoreSources() {
+        try {
+            Intent playStoreIntent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/search?q=Muzei&c=apps"))
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+            preferPackageForIntent(WallpaperSettingsActivity.this,
+                    playStoreIntent, PLAY_STORE_PACKAGE_NAME);
+            startActivity(playStoreIntent);
+        } catch (ActivityNotFoundException activityNotFoundException1) {
+            Toast.makeText(WallpaperSettingsActivity.this,
+                    net.nurik.roman.muzei.R.string.play_store_not_found, Toast.LENGTH_LONG).show();
+        }
     }
 
     public static void preferPackageForIntent(Context context, Intent intent, String packageName) {
@@ -185,7 +207,7 @@ public class WallpaperSettingsActivity extends AppCompatActivity
             localRenderContainer.setVisibility(View.VISIBLE);
             localRenderContainer.animate()
                     .alpha(1)
-                    .setDuration(2000)
+                    .setDuration(1000)
                     .withEndAction(null);
             uiContainer.setBackgroundColor(0x00000000); // for ripple touch feedback
         } else {
