@@ -107,8 +107,13 @@ public class NeodashDreamService extends DreamService implements
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
-            // Do something(?)
+        if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER ||
+                event.getKeyCode() == KeyEvent.KEYCODE_ENTER ||
+                event.getKeyCode() == KeyEvent.KEYCODE_SPACE ||
+                event.getKeyCode() == KeyEvent.KEYCODE_A ||
+                event.getKeyCode() == KeyEvent.KEYCODE_BUTTON_A) {
+            // Do something.
+            ((MuzeiView) findViewById(R.id.fancy_wallpaper)).toggleBlurred(false);
             return true; // Consume event.
         }
         return super.dispatchKeyEvent(event);

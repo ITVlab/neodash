@@ -25,6 +25,7 @@ import com.google.android.apps.muzei.sync.DownloadArtworkJobService;
 import news.androidtv.neodash.R;
 import news.androidtv.neodash.services.NeodashJobService;
 import news.androidtv.neodash.utils.DefaultSettingsApplier;
+import news.androidtv.neodash.utils.RecommendationBuilder;
 
 import static news.androidtv.neodash.Constants.PREF_INIT;
 
@@ -52,6 +53,10 @@ public class StartupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
+
+        startJobService();
+        RecommendationBuilder.maybeShowNewArtworkNotification(this); // Add notification
+
         // Check current app status
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         if (!sp.contains(PREF_INIT) || !sp.getBoolean(PREF_INIT, false)) {
@@ -61,7 +66,6 @@ public class StartupActivity extends AppCompatActivity {
         } else {
             displayAppSettings();
         }
-        startJobService();
     }
 
     private void displayAppSettings() {
