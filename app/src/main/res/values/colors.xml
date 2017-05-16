@@ -7,7 +7,7 @@
     <color name="white">#efefef</color>
 
     <color name="black_50_alpha">#44000000</color>
-    <color name="white_50_alpha">#99ffffff</color>
+    <color name="white_50_alpha">#44ffffff</color>
     <color name="colorPrimary_50_alpha">#553F51B5</color>
     <color name="colorAccent_50_alpha">#55FF4081</color>
 </resources>

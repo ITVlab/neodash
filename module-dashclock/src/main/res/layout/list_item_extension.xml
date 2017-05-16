@@ -27,6 +27,7 @@
         android:layout_gravity="fill_vertical|start"
         android:paddingStart="8dp"
         android:paddingTop="12dp"
+        android:visibility="invisible"
         android:paddingBottom="12dp"
         android:color="#2333" />
 
@@ -72,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:lineSpacingMultiplier="1.1"
-                android:textColor="#757575" />
+                android:textColor="#555" />
 
         </RelativeLayout>
 
