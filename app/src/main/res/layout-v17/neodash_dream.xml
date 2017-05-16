@@ -8,7 +8,14 @@
         android:scaleType="centerCrop"
         android:id="@+id/wallpaper"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:contentDescription="Current Wallpaper" />
+
+    <news.androidtv.neodash.views.MuzeiView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fancy_wallpaper"
+        />
 
     <LinearLayout
         android:layout_width="560dp"
@@ -64,6 +71,7 @@
             android:gravity="center_horizontal"
             android:layout_width="match_parent"
             android:paddingStart="8dp"
+            android:paddingTop="32dp"
             android:layout_height="wrap_content">
 
             <include layout="@layout/widget_include_clock" />

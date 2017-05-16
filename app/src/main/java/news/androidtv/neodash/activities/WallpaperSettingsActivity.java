@@ -86,6 +86,12 @@ public class WallpaperSettingsActivity extends AppCompatActivity
                 seekMoreSources();
             }
         });
+        findViewById(R.id.button_display).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(WallpaperSettingsActivity.this, WallpaperDisplayActivity.class));
+            }
+        });
 
         ((DrawInsetsFrameLayout) findViewById(R.id.draw_insets_frame_layout)).setOnInsetsCallback(
                 new DrawInsetsFrameLayout.OnInsetsCallback() {

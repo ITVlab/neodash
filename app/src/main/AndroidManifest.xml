@@ -52,6 +52,10 @@
             android:exported="true" />
 
         <activity
+            android:name=".activities.WallpaperDisplayActivity"
+            android:exported="true" />
+
+        <activity
             android:name=".activities.DashboardSettingsActivity"
             android:exported="true" />
 

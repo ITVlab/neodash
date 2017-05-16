@@ -147,7 +147,9 @@ public class SettingsAdvancedFragment extends Fragment
 
     @Override
     public void onAttach(Activity activity) {
-        ((SettingsActivity) activity).inflateMenuFromFragment(R.menu.settings_advanced);
+        if (activity instanceof SettingsActivity) {
+            ((SettingsActivity) activity).inflateMenuFromFragment(R.menu.settings_advanced);
+        }
         super.onAttach(activity);
     }
 

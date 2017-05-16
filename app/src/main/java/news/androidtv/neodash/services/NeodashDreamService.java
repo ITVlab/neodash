@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.BaseColumns;
 import android.service.dreams.DreamService;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.graphics.Palette;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -41,8 +42,10 @@ import com.google.android.apps.dashclock.render.SimpleRenderer;
 import com.google.android.apps.dashclock.render.SimpleViewBuilder;
 import com.google.android.apps.muzei.api.MuzeiContract;
 import com.google.android.apps.muzei.render.ImageUtil;
+import com.google.android.apps.muzei.render.MuzeiRendererFragment;
 
 import news.androidtv.neodash.R;
+import news.androidtv.neodash.views.MuzeiView;
 
 import static android.support.v7.graphics.Palette.from;
 import static com.google.android.apps.dashclock.Utils.SECONDS_MILLIS;
@@ -457,5 +460,9 @@ public class NeodashDreamService extends DreamService implements
         mHandler.removeCallbacks(mHandleExtensionsChanged);
         mHandler.postDelayed(mHandleExtensionsChanged,
                 DashClockService.UPDATE_COLLAPSE_TIME_MILLIS);
+    }
+
+    private void updateRenderLocally(boolean renderLocally) {
+
     }
 }
