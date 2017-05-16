@@ -3,14 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:scaleType="centerCrop"
-        android:id="@+id/wallpaper"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:contentDescription="Current Wallpaper" />
-
     <news.androidtv.neodash.views.MuzeiView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,12 +18,12 @@
         android:orientation="vertical"
         android:id="@+id/artwork_container"
         android:gravity="bottom"
-        android:layout_height="160dp">
+        android:layout_height="200dp">
         <TextView
             android:layout_width="wrap_content"
             android:text="Artwork Name: Assumpition"
             android:textSize="28sp"
-            android:fontFamily="serif"
+            android:fontFamily="sans-serif"
             android:id="@+id/artwork_name"
             android:layout_height="wrap_content" />
         <TextView
@@ -39,7 +31,7 @@
             android:text="Artwork By"
             android:textSize="22sp"
             android:textStyle="italic"
-            android:fontFamily="serif"
+            android:fontFamily="sans-serif-condensed"
             android:id="@+id/artwork_artist"
             android:layout_height="wrap_content" />
         <TextView
@@ -47,7 +39,7 @@
             android:text="Featured Art"
             android:textSize="22sp"
             android:textStyle="italic"
-            android:fontFamily="serif"
+            android:fontFamily="sans-serif-condensed"
             android:alpha="0.85"
             android:id="@+id/artwork_source"
             android:layout_height="wrap_content" />
@@ -92,17 +84,4 @@
             </view>
         </LinearLayout>
     </view>
-
-    <TextClock
-        android:id="@+id/textClock"
-        android:layout_width="wrap_content"
-        android:textSize="24sp"
-        android:paddingEnd="48dp"
-        android:visibility="gone"
-        android:fontFamily="serif"
-        android:paddingBottom="32dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:gravity="bottom"
-        android:layout_height="160dp" />
 </RelativeLayout>

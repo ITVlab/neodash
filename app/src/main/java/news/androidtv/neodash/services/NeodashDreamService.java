@@ -164,7 +164,6 @@ public class NeodashDreamService extends DreamService implements
         if (!isDreaming) {
             return; // Exit.
         }
-        ImageView wallpaper = ((ImageView) findViewById(R.id.wallpaper));
         ContentResolver contentResolver = getContentResolver();
 
         Bitmap background;
@@ -191,7 +190,6 @@ public class NeodashDreamService extends DreamService implements
         }
 
         Log.d(TAG, "Show artwork " + MuzeiContract.Artwork.CONTENT_URI);
-        wallpaper.setImageBitmap(background);
 //        wallpaper.setVisibility(View.INVISIBLE);
         showArtworkInfo(background);
     }
@@ -255,7 +253,6 @@ public class NeodashDreamService extends DreamService implements
         ((TextView) findViewById(R.id.artwork_name)).setTextColor(colors.getBodyTextColor());
         ((TextView) findViewById(R.id.artwork_artist)).setTextColor(colors.getTitleTextColor());
         ((TextView) findViewById(R.id.artwork_source)).setTextColor(colors.getTitleTextColor());
-        ((TextView) findViewById(R.id.textClock)).setTextColor(colors.getBodyTextColor());
 
         renderDashclock(false, colors.getBodyTextColor());
     }
@@ -284,21 +281,6 @@ public class NeodashDreamService extends DreamService implements
             @Override
             public void onAwake() {
                 Log.d(TAG, "Dream awaken");
-                /*mManuallyAwoken = true;
-                setFullscreen(false);
-                mHandler.removeCallbacks(mCycleRunnable);
-                mHandler.postDelayed(mCycleRunnable, CYCLE_INTERVAL_MILLIS);
-                mDaydreamContainer.animate()
-                        .alpha(1f)
-                        .rotation(0)
-                        .scaleX(1f)
-                        .scaleY(1f)
-                        .translationX(0f)
-                        .translationY(0f)
-                        .setDuration(res.getInteger(android.R.integer.config_shortAnimTime));
-                if (mSingleCycleAnimator != null) {
-                    mSingleCycleAnimator.cancel();
-                }*/
             }
 
             @Override

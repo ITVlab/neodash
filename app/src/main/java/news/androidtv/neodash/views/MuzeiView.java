@@ -69,7 +69,7 @@ public class MuzeiView extends GLTextureView implements
     }
 
     public void toggleBlurred(final boolean a) {
-        mRenderer.setIsBlurred(!mRenderer.isBlurred(), a);
+        mRenderer.setIsBlurred(false, a);
         // Schedule a re-blur
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
