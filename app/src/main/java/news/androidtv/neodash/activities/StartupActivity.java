@@ -23,6 +23,7 @@ import com.google.android.apps.muzei.render.MuzeiRendererFragment;
 import com.google.android.apps.muzei.sync.DownloadArtworkJobService;
 
 import news.androidtv.neodash.R;
+import news.androidtv.neodash.services.NeodashJobService;
 import news.androidtv.neodash.utils.DefaultSettingsApplier;
 
 import static news.androidtv.neodash.Constants.PREF_INIT;
@@ -60,7 +61,7 @@ public class StartupActivity extends AppCompatActivity {
         } else {
             displayAppSettings();
         }
-
+        startJobService();
     }
 
     private void displayAppSettings() {
@@ -110,18 +111,13 @@ public class StartupActivity extends AppCompatActivity {
         findViewById(R.id.settings_credits).setOnFocusChangeListener(mFocusListener);
     }
 
-    protected void startJobService() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-            jobScheduler.schedule(new JobInfo.Builder(LOAD_ARTWORK_JOB_ID,
-                    new ComponentName(this, DownloadArtworkJobService.class))
-                    .setRequiredNetworkType(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                            ? JobInfo.NETWORK_TYPE_NOT_ROAMING
-                            : JobInfo.NETWORK_TYPE_ANY)
-                    .build());
-        } else {
-            Toast.makeText(this, R.string.error_api_version_low, Toast.LENGTH_SHORT).show();
-        }
+    private void startJobService() {
+        JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        jobScheduler.schedule(new JobInfo.Builder(LOAD_ARTWORK_JOB_ID,
+                new ComponentName(this, NeodashJobService.class))
+                .setPersisted(true)
+                .setPeriodic(1000 * 60 * 15)
+                .build());
     }
 
     private void updateRenderLocally(boolean renderLocally) {
