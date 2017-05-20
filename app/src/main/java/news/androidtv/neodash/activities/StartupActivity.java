@@ -103,6 +103,15 @@ public class StartupActivity extends AppCompatActivity {
         });
         findViewById(R.id.settings_screensaver).setOnFocusChangeListener(mFocusListener);
 
+        findViewById(R.id.settings_other).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StartupActivity.this, AppSettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.settings_other).setOnFocusChangeListener(mFocusListener);
+
         findViewById(R.id.settings_credits).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

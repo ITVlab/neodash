@@ -33,6 +33,8 @@ import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import news.androidtv.neodash.activities.StartupActivity;
+
 /**
  * Created by Nick on 5/6/2017. Builds recommendations, not merely notifications. These
  * recommendations should take high priority to workaround the lack of true wallpaper switching.
@@ -265,7 +267,7 @@ public class RecommendationBuilder {
                 .setContentTitle(context.getString(net.nurik.roman.muzei.R.string.app_name))
                 .setContentText(context.getString(net.nurik.roman.muzei.R.string.notification_new_wallpaper))
                 .setContentIntent(PendingIntent.getActivity(context, 0,
-                        Intent.makeMainActivity(new ComponentName(context, MuzeiActivity.class)),
+                        Intent.makeMainActivity(new ComponentName(context, StartupActivity.class)),
                         PendingIntent.FLAG_UPDATE_CURRENT))
                 .setDeleteIntent(PendingIntent.getBroadcast(context, 0,
                         new Intent(context, NewWallpaperNotificationReceiver.class)

@@ -1,0 +1,16 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="Show Wi-Fi QR Code">
+        <SwitchPreference
+            android:title="Enable"
+            android:key="pref_wifi_enable" />
+        <EditTextPreference
+            android:title="SSID"
+            android:key="pref_wifi_ssid" />
+        <EditTextPreference
+            android:title="Password"
+            android:key="pref_wifi_password" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

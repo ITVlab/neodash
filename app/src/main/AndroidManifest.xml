@@ -92,6 +92,10 @@
             android:enabled="false"
             android:permission="android.permission.BIND_DREAM_SERVICE" />
 
+        <activity android:name=".activities.AppSettingsActivity"
+            android:theme="@style/Theme.ExtensionConfiguration"
+            android:exported="true" />
+
         <!-- Disable some built-in DashClock extensions that won't work on TVs -->
         <service android:name="com.google.android.apps.dashclock.calendar.CalendarExtension"
             android:enabled="false" />
@@ -115,15 +119,12 @@
             <meta-data android:name="worldReadable" android:value="true" />
             <meta-data android:name="description"
                 android:value="Shows some text and it's easy." />
-            <meta-data android:name="settingsActivity"
-                android:value="news.androidtv.neodash.extensions.debug.DummySettingsActivity" />
         </service>
 
         <activity
             android:theme="@style/Theme.ExtensionConfiguration"
             android:name=".extensions.debug.DummySettingsActivity"
             android:exported="true" />
-
 
         <service
             android:name=".extensions.weather.WeatherExtension"

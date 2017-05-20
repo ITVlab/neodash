@@ -8,6 +8,7 @@ import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
@@ -18,6 +19,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.service.dreams.DreamService;
 import android.support.v4.app.FragmentManager;
@@ -43,6 +45,9 @@ import com.google.android.apps.dashclock.render.SimpleViewBuilder;
 import com.google.android.apps.muzei.api.MuzeiContract;
 import com.google.android.apps.muzei.render.ImageUtil;
 import com.google.android.apps.muzei.render.MuzeiRendererFragment;
+
+import net.glxn.qrgen.android.QRCode;
+import net.glxn.qrgen.core.scheme.Wifi;
 
 import news.androidtv.neodash.R;
 import news.androidtv.neodash.views.MuzeiView;
@@ -125,8 +130,6 @@ public class NeodashDreamService extends DreamService implements
         Log.d(TAG, "Start dreaming");
         isDreaming = true;
 
-        // TODO: Begin animations or other behaviors here.
-        // TODO Show attributes
         final Handler handler = new Handler(Looper.getMainLooper());
 
         Runnable displayWallpaper = new Runnable() {
@@ -140,6 +143,19 @@ public class NeodashDreamService extends DreamService implements
             }
         };
         handler.post(displayWallpaper);
+
+        // Check Wi-Fi QR settings
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (preferences.getBoolean("pref_wifi_enable", false)) {
+            Wifi wifi = new Wifi();
+            wifi.setPsk(preferences.getString("pref_wifi_password", ""));
+            wifi.setSsid(preferences.getString("pref_wifi_ssid", ""));
+            wifi.setAuthentication(Wifi.Authentication.WPA); // Let's assume.
+
+            Bitmap b = QRCode.from(wifi.toString()).withSize(220, 220).bitmap();
+            ImageView imageView = (ImageView) findViewById(R.id.wifi_qr);
+            imageView.setImageBitmap(b);
+        }
     }
 
     @Override
@@ -147,8 +163,6 @@ public class NeodashDreamService extends DreamService implements
         super.onDreamingStopped();
         isDreaming = false;
         Log.d(TAG, "Wake up");
-
-        // TODO: Stop anything that was started in onDreamingStarted()
     }
 
     @Override

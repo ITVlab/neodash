@@ -21,6 +21,7 @@ allprojects {
 subprojects {
     repositories {
         maven { url 'https://raw.githubusercontent.com/Goddchen/mvn-repo/master/' }
+        maven { url "https://jitpack.io" }
         mavenCentral()
         jcenter()
     }

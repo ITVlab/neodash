@@ -27,15 +27,19 @@
             style="@style/fullscreen_button"
             android:background="@color/colorPrimary_50_alpha"
             android:id="@+id/settings_muzei"
-            android:text="Wallpaper Settings" />
+            android:text="Wallpaper" />
         <Button
             style="@style/fullscreen_button"
             android:id="@+id/settings_dashclock"
-            android:text="Dashboard Settings"/>
+            android:text="Dashboard"/>
         <Button
             style="@style/fullscreen_button"
             android:id="@+id/settings_screensaver"
-            android:text="Screensaver Settings" />
+            android:text="Screensaver" />
+        <Button
+            style="@style/fullscreen_button"
+            android:id="@+id/settings_other"
+            android:text="Settings" />
         <Button
             style="@style/fullscreen_button"
             android:id="@+id/settings_credits"
