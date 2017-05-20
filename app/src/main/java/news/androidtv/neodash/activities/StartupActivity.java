@@ -37,6 +37,7 @@ import static news.androidtv.neodash.Constants.PREF_INIT;
 
 public class StartupActivity extends AppCompatActivity {
     private static final int LOAD_ARTWORK_JOB_ID = 1;
+    private static final int LOAD_NOTIFICATION_JOB_ID = 2;
 
     private View.OnFocusChangeListener mFocusListener = new View.OnFocusChangeListener() {
         @Override
@@ -117,7 +118,8 @@ public class StartupActivity extends AppCompatActivity {
 
     private void startJobService() {
         JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-        jobScheduler.schedule(new JobInfo.Builder(LOAD_ARTWORK_JOB_ID,
+        jobScheduler.cancel(LOAD_NOTIFICATION_JOB_ID);
+        jobScheduler.schedule(new JobInfo.Builder(LOAD_NOTIFICATION_JOB_ID,
                 new ComponentName(this, NeodashJobService.class))
                 .setPersisted(true)
                 .setPeriodic(1000 * 60 * 15)

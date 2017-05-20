@@ -32,6 +32,7 @@ import android.text.TextUtils;
 import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
 import com.google.android.apps.dashclock.api.host.ExtensionListing;
+import com.google.android.apps.dashclock.extensions.ReadyToCastExtension;
 import com.google.android.apps.dashclock.gmail.GmailExtension;
 import com.google.android.apps.dashclock.nextalarm.NextAlarmExtension;
 import com.google.android.apps.dashclock.weather.WeatherExtension;
@@ -73,10 +74,9 @@ public class ExtensionManager {
     private static ExtensionManager sInstance;
     private static final String PREF_ACTIVE_EXTENSIONS = "active_extensions";
 
+    // THIS IS WHERE WE CAN SET THE DEFAULT EXTENSIONS OF THE APP
     private static final Class[] DEFAULT_EXTENSIONS = {
-            WeatherExtension.class,
-            GmailExtension.class,
-            NextAlarmExtension.class,
+            ReadyToCastExtension.class // Shows 'Ready to Cast'
     };
 
     private SharedPreferences mDefaultPreferences;

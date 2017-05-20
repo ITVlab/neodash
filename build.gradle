@@ -37,8 +37,8 @@ ext {
     okhttpVersion = "3.6.0"
     picassoVersion = "2.5.2"
 
-    neodashVersionCode = 1
-    neodashVersionName = '1.0.0'
+    neodashVersionCode = 2
+    neodashVersionName = '1.0.1'
 }
 
 task clean(type: Delete) {
