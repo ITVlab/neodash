@@ -244,6 +244,21 @@
                 android:value="@string/sms_extension_description" />
         </service>
 
+        <service
+            android:name="com.google.android.apps.dashclock.extensions.ReadyToCastExtension"
+            android:icon="@drawable/ic_cast_white_24dp"
+            android:label="Ready to Cast"
+            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA">
+            <intent-filter>
+                <action android:name="com.google.android.apps.dashclock.Extension" />
+            </intent-filter>
+            <meta-data android:name="protocolVersion"
+                android:value="@integer/current_extension_protocol_version" />
+            <meta-data android:name="worldReadable" android:value="false" />
+            <meta-data android:name="description"
+                android:value="Notifies the viewer that content can be casted." />
+        </service>
+
         <!-- Daydream -->
 
         <activity

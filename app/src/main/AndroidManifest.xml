@@ -16,6 +16,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <!-- Don't request this starting with Marshmallow (we only write to the app's cache folder) -->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -120,6 +122,30 @@
         <activity
             android:theme="@style/Theme.ExtensionConfiguration"
             android:name=".extensions.debug.DummySettingsActivity"
+            android:exported="true" />
+
+
+        <service
+            android:name=".extensions.weather.WeatherExtension"
+            android:label="Current Weather"
+            android:icon="@drawable/ic_weather_sunny"
+            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA">
+            <intent-filter android:priority="100">
+                <action android:name="com.google.android.apps.dashclock.Extension" />
+            </intent-filter>
+
+            <meta-data android:name="protocolVersion"
+                android:value="@integer/current_extension_protocol_version" />
+            <meta-data android:name="worldReadable" android:value="true" />
+            <meta-data android:name="description"
+                android:value="Shows current weather details. Requires your location." />
+            <meta-data android:name="settingsActivity"
+                android:value="news.androidtv.neodash.extensions.weather.WeatherSettingsActivity" />
+        </service>
+
+        <activity
+            android:theme="@style/Theme.ExtensionConfiguration"
+            android:name=".extensions.weather.WeatherSettingsActivity"
             android:exported="true" />
     </application>
 
