@@ -4,6 +4,12 @@
     <Preference
         android:key="pref_weather_location"
         android:title="Location Access Required" />
-    <!-- TODO C / F -->
+
+    <SwitchPreference android:key="pref_weather_si"
+        android:title="SI Units" />
+
+    <Preference android:title="Weather icons made by Austin Andrews at Material Design Icons"
+        android:enabled="false"
+        android:summary="\@Templarian" />
 
 </PreferenceScreen>

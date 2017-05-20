@@ -3,12 +3,12 @@ package news.androidtv.neodash.extensions.weather;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.preference.Preference;
+import android.support.annotation.NonNull;
 
 import com.google.android.apps.dashclock.configuration.BaseSettingsActivity;
 
-import net.nurik.roman.dashclock.R;
-
-import news.androidtv.neodash.extensions.debug.DummyExtension;
+import news.androidtv.neodash.R;
 
 public class WeatherSettingsActivity extends BaseSettingsActivity {
     @Override
@@ -19,12 +19,34 @@ public class WeatherSettingsActivity extends BaseSettingsActivity {
         // Add 'general' preferences.
         mFragment.addPreferencesFromResource(R.xml.weather_prefs);
 
+        setTitle("Weather Extension");
+
+        // Show the current location access.
+        updatePermissionUi();
+        mFragment.findPreference("pref_weather_location").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                requestPermissions(new String[] {Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        updatePermissionUi();
+    }
+
+    public void updatePermissionUi() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) ==
                 PackageManager.PERMISSION_DENIED) {
-            mFragment.findPreference(DummyExtension.PREF_ALARM_SHORTCUT).setTitle("Location Access Required");
+            mFragment.findPreference("pref_weather_location").setTitle("Location Access Required");
+            mFragment.findPreference("pref_weather_location").setEnabled(true);
         } else {
-            mFragment.findPreference(DummyExtension.PREF_ALARM_SHORTCUT).setTitle("Location Access Granted");
+            mFragment.findPreference("pref_weather_location").setTitle("Location Access Granted");
+            mFragment.findPreference("pref_weather_location").setEnabled(false);
         }
     }
 }

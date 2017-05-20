@@ -20,7 +20,7 @@ public class ReadyToCastExtension extends DashClockExtension {
         publishUpdate(new ExtensionData()
                 .visible(true)
                 .status("Ready to Cast")
-                .icon(R.drawable.ic_cast_white_24dp)
+                .icon(R.drawable.ic_cast)
                 .clickIntent(null));
     }
 }

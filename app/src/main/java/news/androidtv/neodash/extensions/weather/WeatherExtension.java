@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -45,14 +46,18 @@ public class WeatherExtension extends DashClockExtension implements GoogleApiCli
     @Override
     protected void onUpdateData(int reason) {
         // Called on a background thread.
+        Log.d(TAG, "Location result: " +
+                checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                 checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            Log.d(TAG, "Fail gracefully");
             publishUpdate(new ExtensionData()
                     .visible(true)
                     .status("Location permission required")
-                    .icon(net.nurik.roman.dashclock.R.drawable.ic_place_white_24dp)
+                    .icon(net.nurik.roman.dashclock.R.drawable.ic_place_bitmap)
                     .clickIntent(null));
         } else {
+            Log.d(TAG, "Succeed gracefully");
             // Get user location
             if (mGoogleApiClient == null) {
                 mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -69,14 +74,23 @@ public class WeatherExtension extends DashClockExtension implements GoogleApiCli
     public void onConnected(@Nullable Bundle bundle) {
         if (checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_DENIED) {
+            Log.d(TAG, "Location permission denied");
             return;
         }
         // Get location
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        Log.d(TAG, "We are at " + mLastLocation.toString());
         // Make weather API request
+        boolean metric = PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean("pref_weather_si", false);
+        String units = metric ? "si" : "us";
+        String tempUnits = metric ? "C" : "F";
+
         String url = "https://api.forecast.io/forecast/" + DARKSKY_KEY + "/" +
                 mLastLocation.getLatitude() + "," +
-                mLastLocation.getLongitude() + "?exclude=minutely,flags,hourly,daily&lang=en&units=us";
+                mLastLocation.getLongitude() + "?exclude=minutely,flags,hourly,daily&lang=en&units="
+                + units;
+        Log.d(TAG, "Requesting from " + url);
         try {
             String response = downloadUrl(url); // It's okay we're doing it on background thread.
             // Process data
@@ -86,16 +100,18 @@ public class WeatherExtension extends DashClockExtension implements GoogleApiCli
             double temperature = parsedResponse.getJSONObject("currently").getDouble("temperature");
             // Publish data
             publishUpdate(new ExtensionData()
-                    .visible(false)
-                    .status(summary + " — " + temperature + "° F") // F only for now.
+                    .visible(true)
+                    .status(summary + " — " + temperature + "° " + tempUnits) // F only for now.
                     .icon(getAppropriateIcon(iconName))
                     .clickIntent(null));
+            Log.d(TAG, "Publishing " + summary + " — " + temperature + "° " + tempUnits);
         } catch (IOException | JSONException e) {
+            Log.e(TAG, e.getMessage());
             e.printStackTrace();
             publishUpdate(new ExtensionData()
                     .visible(false)
                     .status(e.getMessage())
-                    .icon(net.nurik.roman.dashclock.R.drawable.ic_place_white_24dp)
+                    .icon(net.nurik.roman.dashclock.R.drawable.ic_place_bitmap)
                     .clickIntent(null));
         } finally {
             // Disconnect
@@ -110,7 +126,12 @@ public class WeatherExtension extends DashClockExtension implements GoogleApiCli
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        // Get reason.
+        publishUpdate(new ExtensionData()
+                .visible(true)
+                .status("Error connecting to Google Play Services: " + connectionResult.getErrorMessage())
+                .icon(net.nurik.roman.dashclock.R.drawable.ic_place_bitmap)
+                .clickIntent(null));
     }
 
     private String downloadUrl(String myurl) throws IOException {
@@ -149,27 +170,28 @@ public class WeatherExtension extends DashClockExtension implements GoogleApiCli
     }
 
     private int getAppropriateIcon(String iconName) {
-        if (iconName.equals("clear-day")) {
-            return R.drawable.weather_sun;
-        } else if (iconName.equals("clear-night")) {
-            return R.drawable.weather_night;
-        } else if (iconName.equals("rain")) {
-            return R.drawable.weather_rain;
-        } else if (iconName.equals("snow")) {
-            return R.drawable.ic_weather_snow;
-        } else if (iconName.equals("sleet")) {
-            return R.drawable.weather_sleet;
-        } else if (iconName.equals("wind")) {
-            return R.drawable.weather_wind;
-        } else if (iconName.equals("fog")) {
-            return R.drawable.weather_fog;
-        } else if (iconName.equals("cloudy")) {
-            return R.drawable.weather_cloud;
-        } else if (iconName.equals("partly-cloudy-day")) {
-            return R.drawable.weather_partly_cloudy;
-        } else if (iconName.equals("partly-cloudy-night")) {
-            return R.drawable.weather_partly_cloudy;
+        switch (iconName) {
+            case "clear-day":
+                return R.drawable.weather_sunny;
+            case "clear-night":
+                return R.drawable.weather_night;
+            case "rain":
+                return R.drawable.weather_rainy;
+            case "snow":
+                return R.drawable.ic_weather_snow;
+            case "sleet":
+                return R.drawable.weather_snowy_rainy;
+            case "wind":
+                return R.drawable.weather_windy;
+            case "fog":
+                return R.drawable.weather_fog;
+            case "cloudy":
+                return R.drawable.weather_cloudy;
+            case "partly-cloudy-day":
+                return R.drawable.weather_partlycloudy;
+            case "partly-cloudy-night":
+                return R.drawable.weather_partlycloudy;
         }
-        return R.drawable.weather_lightning;
+        return R.drawable.weather_lightning_rainy;
     }
 }
