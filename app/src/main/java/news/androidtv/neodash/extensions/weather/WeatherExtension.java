@@ -72,6 +72,30 @@ public class WeatherExtension extends DashClockExtension implements GoogleApiCli
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                postWeather(); // Need to run network tasks in a background thread.
+            }
+        }).start();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        // Get reason.
+        publishUpdate(new ExtensionData()
+                .visible(true)
+                .status("Error connecting to Google Play Services: " + connectionResult.getErrorMessage())
+                .icon(net.nurik.roman.dashclock.R.drawable.ic_place_bitmap)
+                .clickIntent(null));
+    }
+
+    private void postWeather() {
         if (checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_DENIED) {
             Log.d(TAG, "Location permission denied");
@@ -117,21 +141,6 @@ public class WeatherExtension extends DashClockExtension implements GoogleApiCli
             // Disconnect
             mGoogleApiClient.disconnect();
         }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        // Get reason.
-        publishUpdate(new ExtensionData()
-                .visible(true)
-                .status("Error connecting to Google Play Services: " + connectionResult.getErrorMessage())
-                .icon(net.nurik.roman.dashclock.R.drawable.ic_place_bitmap)
-                .clickIntent(null));
     }
 
     private String downloadUrl(String myurl) throws IOException {
