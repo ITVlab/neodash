@@ -472,6 +472,17 @@ public class SettingsChooseSourceFragment extends Fragment implements LoaderMana
                     }
                 }
             });
+            source.selectSourceButton.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        source.icon.setColorFilter(getResources().getColor(android.R.color.white),
+                                PorterDuff.Mode.SRC_ATOP);
+                    } else {
+                        source.icon.setColorFilter(source.color, PorterDuff.Mode.SRC_ATOP);
+                    }
+                }
+            });
 
             source.selectSourceButton.setOnLongClickListener(new View.OnLongClickListener() {
 

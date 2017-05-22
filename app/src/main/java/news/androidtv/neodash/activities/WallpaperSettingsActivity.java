@@ -61,6 +61,17 @@ public class WallpaperSettingsActivity extends AppCompatActivity
             SettingsAdvancedFragment.class,
     };
 
+    private View.OnFocusChangeListener mFocusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus) {
+                v.setBackgroundColor(getResources().getColor(R.color.featuredart_color));
+            } else {
+                v.setBackgroundColor(getResources().getColor(android.R.color.white));
+            }
+        }
+    };
+
     private static final String PLAY_STORE_PACKAGE_NAME = "com.android.vending";
 
     private int mStartSection = START_SECTION_SOURCE;
@@ -86,12 +97,15 @@ public class WallpaperSettingsActivity extends AppCompatActivity
                 seekMoreSources();
             }
         });
+        findViewById(R.id.button_sources).setOnFocusChangeListener(mFocusChangeListener);
+
         findViewById(R.id.button_display).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(WallpaperSettingsActivity.this, WallpaperDisplayActivity.class));
             }
         });
+        findViewById(R.id.button_display).setOnFocusChangeListener(mFocusChangeListener);
 
         ((DrawInsetsFrameLayout) findViewById(R.id.draw_insets_frame_layout)).setOnInsetsCallback(
                 new DrawInsetsFrameLayout.OnInsetsCallback() {

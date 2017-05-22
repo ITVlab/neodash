@@ -45,6 +45,17 @@ public class SettingsAdvancedFragment extends Fragment
     private SeekBar mDimSeekBar;
     private SeekBar mGreySeekBar;
 
+    private View.OnFocusChangeListener mFocusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            /*if (hasFocus) {
+                v.setBackgroundColor(getResources().getColor(R.color.featuredart_color));
+            } else {
+                v.setBackgroundColor(getResources().getColor(android.R.color.white));
+            }*/
+        }
+    };
+
     public SettingsAdvancedFragment() {
     }
 
@@ -73,6 +84,7 @@ public class SettingsAdvancedFragment extends Fragment
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+        mBlurSeekBar.setOnFocusChangeListener(mFocusChangeListener);
 
         mDimSeekBar = (SeekBar) rootView.findViewById(R.id.dim_amount);
         mDimSeekBar.setProgress(Prefs.getSharedPreferences(getContext())
@@ -94,6 +106,7 @@ public class SettingsAdvancedFragment extends Fragment
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+        mDimSeekBar.setOnFocusChangeListener(mFocusChangeListener);
 
         mGreySeekBar = (SeekBar) rootView.findViewById(R.id.grey_amount);
         mGreySeekBar.setProgress(Prefs.getSharedPreferences(getContext())
@@ -115,6 +128,8 @@ public class SettingsAdvancedFragment extends Fragment
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+        mGreySeekBar.setOnFocusChangeListener(mFocusChangeListener);
+
         CheckBox mNotifyNewWallpaperCheckBox = (CheckBox) rootView.findViewById(
                 R.id.notify_new_wallpaper_checkbox);
         mNotifyNewWallpaperCheckBox.setOnCheckedChangeListener(

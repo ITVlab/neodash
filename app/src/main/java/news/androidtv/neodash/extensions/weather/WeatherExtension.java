@@ -103,6 +103,15 @@ public class WeatherExtension extends DashClockExtension implements GoogleApiCli
         }
         // Get location
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLastLocation == null) {
+            // Need users to enable location.
+            publishUpdate(new ExtensionData()
+                    .visible(true)
+                    .status("Enable Location Services in Settings")
+                    .icon(net.nurik.roman.dashclock.R.drawable.ic_place_bitmap)
+                    .clickIntent(null));
+            return;
+        }
         Log.d(TAG, "We are at " + mLastLocation.toString());
         // Make weather API request
         boolean metric = PreferenceManager.getDefaultSharedPreferences(this)

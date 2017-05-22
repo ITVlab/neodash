@@ -42,6 +42,7 @@
             android:name="com.google.android.apps.muzei.MuzeiActivity"
             android:theme="@style/Theme.MuzeiActivity"
             android:launchMode="singleTop"
+            android:enabled="false"
             android:resizeableActivity="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
