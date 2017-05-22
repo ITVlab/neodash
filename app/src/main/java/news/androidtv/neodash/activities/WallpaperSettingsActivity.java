@@ -64,11 +64,11 @@ public class WallpaperSettingsActivity extends AppCompatActivity
     private View.OnFocusChangeListener mFocusChangeListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
-            if (hasFocus) {
+            /*if (hasFocus) {
                 v.setBackgroundColor(getResources().getColor(R.color.featuredart_color));
             } else {
                 v.setBackgroundColor(getResources().getColor(android.R.color.white));
-            }
+            }*/
         }
     };
 
