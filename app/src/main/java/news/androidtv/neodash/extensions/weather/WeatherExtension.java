@@ -1,5 +1,6 @@
 package news.androidtv.neodash.extensions.weather;
 
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -43,6 +44,7 @@ public class WeatherExtension extends DashClockExtension implements GoogleApiCli
 
     private GoogleApiClient mGoogleApiClient;
 
+    @SuppressLint("WrongConstant")
     @Override
     protected void onUpdateData(int reason) {
         // Called on a background thread.
@@ -88,6 +90,7 @@ public class WeatherExtension extends DashClockExtension implements GoogleApiCli
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         // Get reason.
+        Log.e(TAG, connectionResult.getErrorMessage());
         publishUpdate(new ExtensionData()
                 .visible(true)
                 .status("Error connecting to Google Play Services: " + connectionResult.getErrorMessage())
@@ -98,21 +101,22 @@ public class WeatherExtension extends DashClockExtension implements GoogleApiCli
     private void postWeather() {
         if (checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_DENIED) {
-            Log.d(TAG, "Location permission denied");
+            Log.w(TAG, "Location permission denied");
             return;
         }
         // Get location
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation == null) {
             // Need users to enable location.
+            Log.w(TAG, "Location is null. Probably Location Services is not turned on.");
             publishUpdate(new ExtensionData()
                     .visible(true)
-                    .status("Enable Location Services in Settings")
+                    .status("Turn on Location")
                     .icon(net.nurik.roman.dashclock.R.drawable.ic_place_bitmap)
                     .clickIntent(null));
             return;
         }
-        Log.d(TAG, "We are at " + mLastLocation.toString());
+        Log.d(TAG, "We are at " + mLastLocation.getLatitude() + ", xxx");
         // Make weather API request
         boolean metric = PreferenceManager.getDefaultSharedPreferences(this)
                 .getBoolean("pref_weather_si", false);
@@ -134,7 +138,7 @@ public class WeatherExtension extends DashClockExtension implements GoogleApiCli
             // Publish data
             publishUpdate(new ExtensionData()
                     .visible(true)
-                    .status(summary + " — " + temperature + "° " + tempUnits) // F only for now.
+                    .status(summary + " — " + Math.round(temperature) + "° " + tempUnits) // F only for now.
                     .icon(getAppropriateIcon(iconName))
                     .clickIntent(null));
             Log.d(TAG, "Publishing " + summary + " — " + temperature + "° " + tempUnits);

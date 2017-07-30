@@ -1,6 +1,7 @@
 package news.androidtv.neodash.extensions.weather;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.preference.Preference;
@@ -36,6 +37,7 @@ public class WeatherSettingsActivity extends BaseSettingsActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         updatePermissionUi();
+        startService(new Intent(this, WeatherExtension.class));
     }
 
     public void updatePermissionUi() {
